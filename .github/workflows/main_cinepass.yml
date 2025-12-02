@@ -1,4 +1,4 @@
-name: Build and deploy Node.js app to Azure Web App - cinepass
+name: Build and deploy React frontend to Azure Web App - cinepass
 
 on:
   push:
@@ -26,10 +26,10 @@ jobs:
           npm install
           npm run build
 
-      - name: Upload artifact for deployment job
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: node-app
+          name: frontend-build
           path: ./frontend/build
 
   deploy:
@@ -40,10 +40,10 @@ jobs:
       contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: node-app
+          name: frontend-build
 
       - name: Login to Azure
         uses: azure/login@v2
