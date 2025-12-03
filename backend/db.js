@@ -1,21 +1,21 @@
-const { Pool } = require("pg");  // Importing the Pool from pg
-require("dotenv").config();  // Load environment variables from .env file
+const { Pool } = require("pg");
+require("dotenv").config();
 
-// Set up the connection pool using environment variables for security
+// PostgreSQL Connection Pool
 const pool = new Pool({
-  user: process.env.DB_USER,           // Database username (from .env)
-  host: process.env.DB_HOST,           // Database host (localhost or remote)
-  database: process.env.DB_NAME,       // Database name
-  password: process.env.DB_PASSWORD,   // Database password (from .env)
-  port: process.env.DB_PORT,           // Database port (usually 5432 for PostgreSQL)
-  ssl: process.env.DB_SSL === 'true' ? true : false,  // SSL for secure connections (for production, use true)
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+  ssl: {
+    rejectUnauthorized: false   // Required for Azure PostgreSQL
+  }
 });
+
+// Test connection
 pool.connect()
-  .then(() => {
-    console.log('Database connected successfully');
-  })
-  .catch((err) => {
-    console.error('Database connection error:', err.message);
-  });
-// Exporting the pool instance to use in other parts of the application
+  .then(() => console.log("✅ Connected to Azure PostgreSQL successfully"))
+  .catch(err => console.error("❌ Database connection error:", err.message));
+
 module.exports = pool;
