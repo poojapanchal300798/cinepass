@@ -8,38 +8,30 @@ const showRoutes = require("./routes/showRoutes");
 
 const app = express();
 
-// ------------------- CORS (LOCAL + AZURE READY) -------------------
+// CORS
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:3001",
-      "http://localhost:3002",
-      "http://localhost:3003",
-      "https://YOUR_AZURE_FRONTEND_URL" // Replace after deployment
-    ],
+    origin: "*",
     methods: ["GET", "POST"],
-    credentials: true
+    credentials: false,
   })
 );
 
-// Body parser
 app.use(express.json());
 
-// --------------------- API ROUTES ---------------------
+// API ROUTES
 app.use("/auth", authRoutes);
 app.use("/api/shows", showRoutes);
 
-// ------------------------ SERVE REACT ------------------------
+// ---------------- SERVE FRONTEND ----------------
 app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
 });
 
-// ---------------------- START SERVER ------------------------
+// ---------------- START SERVER ----------------
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
-  console.log(`Backend + Frontend running at http://localhost:${PORT}`);
+  console.log(`🚀 Backend + Frontend running on port ${PORT}`);
 });
