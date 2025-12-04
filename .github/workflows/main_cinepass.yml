@@ -1,8 +1,4 @@
-name: Build and deploy Node backend + React frontend to Azure Web App - cinepass
-
-permissions:
-  id-token: write
-  contents: read
+name: Deploy Cinepass Full App
 
 on:
   push:
@@ -11,9 +7,10 @@ on:
   workflow_dispatch:
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
       - uses: actions/checkout@v4
 
@@ -22,29 +19,29 @@ jobs:
         with:
           node-version: '20.x'
 
-      # Install & build frontend
+      # Build frontend
       - name: Build frontend
         working-directory: ./frontend
         run: |
           npm install
           npm run build
 
-      # Copy React build into backend folder
-      - name: Move frontend build to backend
+      # Move build output into backend
+      - name: Move frontend build
         run: |
           rm -rf backend/frontend
           mv frontend/build backend/frontend
 
       # Install backend dependencies
-      - name: Install backend
+      - name: Install backend dependencies
         working-directory: ./backend
         run: npm install
 
-      # Upload full backend as artifact
-      - name: Upload artifact
+      # Upload backend as artifact
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: full-backend
+          name: deploy-folder
           path: ./backend
 
   deploy:
@@ -55,19 +52,15 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: full-backend
+          name: deploy-folder
+          path: .
 
-      # ---------------- Azure Login (OIDC) ----------------
-      - name: Login to Azure
-        uses: azure/login@v2
+      - name: Deploy using FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      # ---------------- Deploy Backend ---------------------
-      - name: Deploy to Azure
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'cinepass'
-          package: .
+          server: waws-prod-sec-033.ftp.azurewebsites.windows.net
+          protocol: ftps
+          username: ${{ secrets.AZURE_FTP_USERNAME }}
+          password: ${{ secrets.AZURE_FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: /site/wwwroot
