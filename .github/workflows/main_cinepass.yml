@@ -1,5 +1,9 @@
 name: Build and deploy Node backend + React frontend to Azure Web App - cinepass
 
+permissions:
+  id-token: write
+  contents: read
+
 on:
   push:
     branches:
@@ -53,13 +57,15 @@ jobs:
         with:
           name: full-backend
 
+      # ---------------- Azure Login (OIDC) ----------------
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_CB6CB0FE70434F1480DA3409974991E5 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_67A1D435BE4D43F78C01FAEFAAC202F2 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_ABF24F3CC7AA467AB3C39741DB40BF63 }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      # ---------------- Deploy Backend ---------------------
       - name: Deploy to Azure
         uses: azure/webapps-deploy@v3
         with:
