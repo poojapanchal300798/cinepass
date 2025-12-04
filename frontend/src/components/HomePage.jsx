@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../style/homepage.css";
 import { FaSearch, FaLock } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 
 import logo from "../assets/north-star-logo.jpg";
 
@@ -91,10 +91,12 @@ const HomePage = () => {
         <div className="movie-grid">
           {movies.map((m) => (
             <div key={m.id} className="movie-card">
-              <img src={m.poster} className="movie-img" alt="" />
-              <h4 className="movie-name">{m.title}</h4>
-              <p className="movie-info">{m.showtime} — {m.availability}</p>
-            </div>
+          <Link to={`/book/${m.id}`}>  {/* Add Link here to route to specific movie */}
+            <img src={m.poster} className="movie-img" alt={m.title} />
+            <h4 className="movie-name">{m.title}</h4>
+            <p className="movie-info">{m.showtime} — {m.availability}</p>
+          </Link>
+        </div>
           ))}
         </div>
 

@@ -1,37 +1,24 @@
-  const express = require("express");
-  const app = express();
-  const cors = require("cors");
-  const { Pool } = require("pg");
-  const pool = require("./db");
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const movieRoutes = require('./routes/movies');
+const showRoutes = require('./routes/shows');
+const bookingRoutes = require('./routes/bookings');
+const errorMiddleware = require('./middlewares/errorMiddleware');
 
-  app.use(cors(  ));
-  
+const app = express();
+const PORT = process.env.PORT || 5000;
 
-  app.use(express.json()); 
+app.use(cors());
+app.use(express.json());
 
-  app.post("/login", async (req, res) => {
-    console.log("Request body:", req.body);
+app.use('/api/movies', movieRoutes);
+app.use('/api/shows', showRoutes);
+app.use('/api/bookings', bookingRoutes);
 
-    const { username, password } = req.body;
+// Error handling middleware
+app.use(errorMiddleware);
 
-    try{
-      const result= await pool.query("select * from admin_users where username=$1 and password=$2",
-        [username, password]);
-        console.log("Query result:", result.rows);
-    
-      if (result.rows.length > 0) {
-      res.json({ success: true, message: "Welcome to Cinepass" });
-    }
-    else {
-      res.json({ success: false, message: "Check username and Password" });
-    }
-    } catch (err) {
-      console.error("Error  login:", err);
-      res.status(500).json({ success: false, message: "Server error" });
-    }
-  });
-
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log("Server running on port " + PORT);
-  });
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});

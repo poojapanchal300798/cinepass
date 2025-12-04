@@ -1,60 +1,61 @@
-const pool = require("../db"); // PostgreSQL connection
+const pool = require('../db');
 
 // Get all shows
-const getShows = async (req, res) => {
+const getAllShows = async (req, res) => {
+  const { movieId, locationId, date } = req.query;
   try {
-    const result = await pool.query('SELECT * FROM shows');
+    const result = await pool.query(`
+      SELECT * FROM showtimes WHERE movie_id = $1 AND location_id = $2 AND date = $3
+    `, [movieId, locationId, date]);
     res.json(result.rows);
   } catch (err) {
-    console.error('Error retrieving shows:', err);
-    res.status(500).send('Error retrieving shows');
+    res.status(500).json({ message: 'Failed to fetch shows' });
   }
 };
 
 // Add a new show
 const addShow = async (req, res) => {
-  const { name, date_time, location, screen, adult_price, kid_price, seats } = req.body;
-
+  const { movieId, locationId, date, time, screen, adultPrice, childPrice } = req.body;
   try {
-    const result = await pool.query(
-      'INSERT INTO shows (name, date_time, location, screen, adult_price, kid_price, seats) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-      [name, date_time, location, screen, adult_price, kid_price, seats]
-    );
+    const query = `
+      INSERT INTO showtimes (movie_id, location_id, date, time, screen, adult_price, child_price)
+      VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
+    `;
+    const values = [movieId, locationId, date, time, screen, adultPrice, childPrice];
+    const result = await pool.query(query, values);
     res.status(201).json(result.rows[0]);
   } catch (err) {
-    console.error('Error adding new show:', err);
-    res.status(500).send('Error adding new show');
+    res.status(500).json({ message: 'Failed to add show' });
   }
 };
 
-// Update an existing show
+// Update a show
 const updateShow = async (req, res) => {
   const { id } = req.params;
-  const { name, date_time, location, screen, adult_price, kid_price, seats } = req.body;
-
+  const { movieId, locationId, date, time, screen, adultPrice, childPrice } = req.body;
   try {
-    const result = await pool.query(
-      'UPDATE shows SET name = $1, date_time = $2, location = $3, screen = $4, adult_price = $5, kid_price = $6, seats = $7 WHERE id = $8 RETURNING *',
-      [name, date_time, location, screen, adult_price, kid_price, seats, id]
-    );
+    const query = `
+      UPDATE showtimes
+      SET movie_id = $1, location_id = $2, date = $3, time = $4, screen = $5, adult_price = $6, child_price = $7
+      WHERE id = $8 RETURNING *;
+    `;
+    const values = [movieId, locationId, date, time, screen, adultPrice, childPrice, id];
+    const result = await pool.query(query, values);
     res.json(result.rows[0]);
   } catch (err) {
-    console.error('Error updating show:', err);
-    res.status(500).send('Error updating show');
+    res.status(500).json({ message: 'Failed to update show' });
   }
 };
 
 // Delete a show
 const deleteShow = async (req, res) => {
   const { id } = req.params;
-
   try {
-    const result = await pool.query('DELETE FROM shows WHERE id = $1 RETURNING *', [id]);
-    res.json(result.rows[0]);
+    await pool.query('DELETE FROM showtimes WHERE id = $1', [id]);
+    res.json({ message: 'Show deleted successfully' });
   } catch (err) {
-    console.error('Error deleting show:', err);
-    res.status(500).send('Error deleting show');
+    res.status(500).json({ message: 'Failed to delete show' });
   }
 };
 
-module.exports = { getShows, addShow, updateShow, deleteShow };
+module.exports = { getAllShows, addShow, updateShow, deleteShow };
