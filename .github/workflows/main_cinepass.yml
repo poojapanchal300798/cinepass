@@ -1,4 +1,4 @@
-name: Build and deploy React frontend to Azure Web App - cinepass
+name: Build and deploy Node backend + React frontend to Azure Web App - cinepass
 
 on:
   push:
@@ -9,41 +9,49 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js version
+      - name: Use Node 20
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
 
-      - name: Install and build frontend
+      # Install & build frontend
+      - name: Build frontend
         working-directory: ./frontend
         run: |
           npm install
           npm run build
 
+      # Copy React build into backend folder
+      - name: Move frontend build to backend
+        run: |
+          rm -rf backend/frontend
+          mv frontend/build backend/frontend
+
+      # Install backend dependencies
+      - name: Install backend
+        working-directory: ./backend
+        run: npm install
+
+      # Upload full backend as artifact
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: frontend-build
-          path: ./frontend/build
+          name: full-backend
+          path: ./backend
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    permissions:
-      id-token: write
-      contents: read
 
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: frontend-build
+          name: full-backend
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -52,9 +60,8 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_67A1D435BE4D43F78C01FAEFAAC202F2 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_ABF24F3CC7AA467AB3C39741DB40BF63 }}
 
-      - name: Deploy to Azure Web App
+      - name: Deploy to Azure
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'cinepass'
-          slot-name: 'Production'
           package: .
