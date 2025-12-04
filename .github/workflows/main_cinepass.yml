@@ -53,7 +53,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: deploy-folder
-          path: .
+          path: ./deploy
 
       - name: Deploy using FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -62,5 +62,5 @@ jobs:
           protocol: ftps
           username: ${{ secrets.AZURE_FTP_USERNAME }}
           password: ${{ secrets.AZURE_FTP_PASSWORD }}
-          local-dir: ./
-          server-dir: /site/wwwroot
+          local-dir: ./deploy/
+          server-dir: /site/wwwroot/
