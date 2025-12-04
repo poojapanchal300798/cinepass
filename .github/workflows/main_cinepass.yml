@@ -10,7 +10,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
 
@@ -19,48 +19,50 @@ jobs:
         with:
           node-version: '20.x'
 
-      # Build frontend
-      - name: Build frontend
+      # --- FRONTEND ---
+      - name: Install & Build Frontend
         working-directory: ./frontend
         run: |
           npm install
           npm run build
 
-      # Move build output into backend
-      - name: Move frontend build
+      # Move frontend build into backend folder so server can serve it
+      - name: Move frontend build into backend
         run: |
           rm -rf backend/frontend
           mv frontend/build backend/frontend
 
-      # Install backend dependencies
-      - name: Install backend dependencies
+      # --- BACKEND ---
+      - name: Install Backend Dependencies
         working-directory: ./backend
         run: npm install
 
-      # Upload backend as artifact
-      - name: Upload build artifact
+      # Create ZIP package for Azure
+      - name: Zip backend folder
+        run: |
+          cd backend
+          zip -r ../deploy.zip .
+
+      - name: Upload ZIP Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: deploy-folder
-          path: ./backend
+          name: deploy-package
+          path: deploy.zip
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
 
     steps:
-      - name: Download artifact
+      - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: deploy-folder
-          path: ./deploy
+          name: deploy-package
+          path: .
 
-      - name: Deploy using FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      - name: Deploy ZIP to Azure
+        uses: azure/webapps-deploy@v3
         with:
-          server: waws-prod-sec-033.ftp.azurewebsites.windows.net
-          protocol: ftps
-          username: ${{ secrets.AZURE_FTP_USERNAME }}
-          password: ${{ secrets.AZURE_FTP_PASSWORD }}
-          local-dir: ./deploy/
-          server-dir: /site/wwwroot/
+          app-name: 'cinepass'
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+          package: deploy.zip
