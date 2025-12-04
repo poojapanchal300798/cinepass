@@ -19,50 +19,53 @@ jobs:
         with:
           node-version: '20.x'
 
-      # --- FRONTEND ---
-      - name: Install & Build Frontend
+      # Build frontend
+      - name: Build frontend
         working-directory: ./frontend
         run: |
           npm install
           npm run build
 
-      # Move frontend build into backend folder so server can serve it
-      - name: Move frontend build into backend
+      # Move frontend build into backend
+      - name: Move frontend build
         run: |
           rm -rf backend/frontend
-          mv frontend/build backend/frontend
+          mkdir -p backend/frontend
+          mv frontend/build backend/frontend/
 
-      # --- BACKEND ---
-      - name: Install Backend Dependencies
+      # Install backend dependencies
+      - name: Install backend dependencies
         working-directory: ./backend
         run: npm install
 
-      # Create ZIP package for Azure
-      - name: Zip backend folder
+      # Create ZIP package for Azure deploy
+      - name: Prepare ZIP package
         run: |
           cd backend
           zip -r ../deploy.zip .
 
-      - name: Upload ZIP Artifact
+      # Upload ZIP artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: deploy-package
+          name: deploy-zip
           path: deploy.zip
+
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
 
     steps:
-      - name: Download build artifact
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: deploy-package
+          name: deploy-zip
           path: .
 
       - name: Deploy ZIP to Azure
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'cinepass'
+          app-name: "cinepass"
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-          package: deploy.zip
+          package: "deploy.zip"
