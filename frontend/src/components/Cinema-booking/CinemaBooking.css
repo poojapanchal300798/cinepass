@@ -1,0 +1,537 @@
+/* CinemaBooking.css */
+.location-selection-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #222;
+  color: white;
+  border-radius: 10px;
+  font-family: Arial, sans-serif;
+}
+
+.step-progress {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  font-size: 1rem;
+}
+
+.step {
+  background-color: #333;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-align: center;
+  width: 22%;
+  transition: background-color 0.3s;
+}
+
+.step.active {
+  background-color: #007bff; /* Active step color */
+  color: white;
+}
+
+.location-cards {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.location-card {
+  background-color: #444;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 30%;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.location-card:hover {
+  background-color: #007bff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.date-buttons,
+.time-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+button {
+  padding: 12px 20px;
+  margin: 10px;
+  background-color: #333;
+  border: 1px solid #444;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 23%;
+  font-size: 1.1rem;
+}
+
+button:hover {
+  background-color: #007bff;
+}
+
+button:active {
+  background-color: #0056b3;
+}
+
+button.selected {
+  background-color: #00cc66; /* Active time/date button */
+}
+
+.continue-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #00cc66;
+  color: white;
+  border: none;
+  font-size: 1.2rem;
+  margin-top: 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.continue-btn:hover {
+  background-color: #00994d;
+}
+
+/* Styling for smaller screens */
+@media (max-width: 768px) {
+  .location-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .location-card {
+    width: 80%;
+    margin: 10px 0;
+  }
+
+  .date-buttons, .time-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  button {
+    width: 80%;
+    margin: 5px 0;
+  }
+}
+/* CinemaBooking.css */
+.seat-selection-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #222;
+  color: white;
+  border-radius: 10px;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.screen {
+  text-align: center;
+  font-size: 1.5rem;
+  margin: 20px 0;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.seat-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.seat-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.seat {
+  width: 40px;
+  height: 40px;
+  margin: 5px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.seat:hover {
+  background-color: #0056b3;
+}
+
+.seat.selected {
+  background-color: #ff4d4d; /* Selected seat color */
+}
+
+.continue-btn {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  background-color: #00cc66;
+  color: white;
+  border: none;
+  font-size: 1.2rem;
+  margin-top: 30px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.continue-btn:hover {
+  background-color: #00994d;
+}
+/* CinemaBooking.css */
+
+/* Movie Details Card Container */
+.movie-details-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.movie-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.movie-poster {
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-right: 20px;
+}
+
+.movie-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+  color: #fff;
+}
+
+.movie-info {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.movie-info p {
+  margin: 5px 0;
+}
+
+strong {
+  font-weight: bold;
+}
+
+.book-now-btn {
+  padding: 15px 30px;
+  background-color: #00cc66;
+  color: white;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+.book-now-btn:hover {
+  background-color: #00994d;
+}
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+  .movie-header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .movie-poster {
+    width: 150px;
+    height: 225px;
+  }
+
+  .movie-title {
+    text-align: center;
+  }
+
+  .book-now-btn {
+    width: auto;
+    margin-top: 20px;
+  }
+}
+/* CinemaBooking.css */
+
+/* Ticket Page Container */
+.tickets-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #222;
+  color: white;
+  border-radius: 10px;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* Ticket Type Section */
+.ticket-type {
+  margin-bottom: 30px;
+}
+
+.ticket-info {
+  background-color: #34495e;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.ticket-info h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.ticket-info p {
+  margin: 10px 0;
+  font-size: 1.1rem;
+}
+
+.ticket-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ticket-controls button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  font-size: 1.5rem;
+  margin: 0 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.ticket-controls button:hover {
+  background-color: #2980b9;
+}
+
+.ticket-controls span {
+  font-size: 1.2rem;
+  margin: 0 15px;
+}
+
+/* Order Summary */
+.order-summary {
+  background-color: #34495e;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.order-summary h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.summary p {
+  margin: 5px 0;
+}
+
+.summary strong {
+  font-weight: bold;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.action-buttons button {
+  padding: 15px 30px;
+  background-color: #00cc66;
+  color: white;
+  font-size: 1.2rem;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 48%;
+}
+
+.action-buttons button:hover {
+  background-color: #00994d;
+}
+
+.action-buttons button:first-child {
+  background-color: #e74c3c;
+}
+
+.action-buttons button:first-child:hover {
+  background-color: #c0392b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ticket-info {
+    text-align: center;
+  }
+
+  .action-buttons button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+/* CinemaBooking.css */
+
+/* Payment Page */
+.payment-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #222;
+  color: white;
+  border-radius: 10px;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* Form Section */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  background-color: #34495e;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.form-group input::placeholder {
+  color: #95a5a6;
+}
+
+.form-group small {
+  font-size: 0.8rem;
+  color: #95a5a6;
+}
+
+.form-group .apply-btn {
+  background-color: #3498db;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 5px;
+  transition: background-color 0.3s;
+}
+
+.form-group .apply-btn:hover {
+  background-color: #2980b9;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.action-buttons button {
+  padding: 12px 30px;
+  background-color: #00cc66;
+  color: white;
+  font-size: 1.2rem;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 48%;
+}
+
+.action-buttons button:hover {
+  background-color: #00994d;
+}
+
+.action-buttons button:first-child {
+  background-color: #e74c3c;
+}
+
+.action-buttons button:first-child:hover {
+  background-color: #c0392b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .payment-container {
+    padding: 15px;
+  }
+
+  .action-buttons button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+/* CinemaBooking.css */
+
+/* GENERAL STYLES */
+
+/* Common Container Styling for All Pages */
