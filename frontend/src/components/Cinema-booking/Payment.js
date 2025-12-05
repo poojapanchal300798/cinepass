@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './CinemaBooking.css';  // Importing CSS for styling
+import "../../style/CinemaBooking.css";  // ✅ Correct CSS path
 
 function Payment() {
   const [email, setEmail] = useState('');
@@ -10,9 +10,7 @@ function Payment() {
   const [promoCode, setPromoCode] = useState('');
 
   const handlePayment = () => {
-    // Logic to handle payment
     alert('Payment Successful!');
-    // Redirect or handle further payment actions here
   };
 
   return (
@@ -89,7 +87,9 @@ function Payment() {
 
         <div className="action-buttons">
           <button type="button" onClick={() => window.history.back()}>Back</button>
-          <button type="button" onClick={handlePayment} className="continue-btn">Proceed to Payment</button>
+          <button type="button" onClick={handlePayment} className="continue-btn">
+            Proceed to Payment
+          </button>
         </div>
       </form>
     </div>

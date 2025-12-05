@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './CinemaBooking.css';  // Importing CSS for styling
+import "../../style/CinemaBooking.css";  // ✅ Correct CSS path
 
 function Tickets() {
   const [adultTickets, setAdultTickets] = useState(0);
@@ -8,16 +8,13 @@ function Tickets() {
   const [total, setTotal] = useState(0);
   const navigate = useNavigate();
 
-  // Prices for tickets
   const adultPrice = 12;
   const childPrice = 8;
 
-  // Update total price based on selected tickets
   const updateTotal = () => {
     setTotal(adultTickets * adultPrice + childTickets * childPrice);
   };
 
-  // Handle ticket increment/decrement
   const handleTicketChange = (type, action) => {
     if (type === 'adult') {
       if (action === 'increment') setAdultTickets(adultTickets + 1);
@@ -34,12 +31,13 @@ function Tickets() {
       alert('Please select at least one ticket.');
       return;
     }
-    navigate('/book/payment');
+    navigate(`/book/${localStorage.getItem("movieId")}/payment`);
   };
 
   return (
     <div className="tickets-container">
       <h2>Select Ticket Types</h2>
+
       <div className="ticket-type">
         <div className="ticket-info">
           <h3>Adult</h3>
@@ -50,6 +48,7 @@ function Tickets() {
             <button onClick={() => handleTicketChange('adult', 'increment')}>+</button>
           </div>
         </div>
+
         <div className="ticket-info">
           <h3>Child (under 12)</h3>
           <p>€8.00 per ticket</p>
@@ -60,6 +59,7 @@ function Tickets() {
           </div>
         </div>
       </div>
+
       <div className="order-summary">
         <h3>Order Summary</h3>
         <div className="summary">
@@ -67,8 +67,9 @@ function Tickets() {
           <p><strong>Total:</strong> €{total.toFixed(2)}</p>
         </div>
       </div>
+
       <div className="action-buttons">
-        <button onClick={() => navigate('/book/seats')}>Back</button>
+        <button onClick={() => navigate(`/book/${localStorage.getItem("movieId")}/seats`)}>Back</button>
         <button onClick={handleProceedToPayment} className="continue-btn">Continue to Payment</button>
       </div>
     </div>

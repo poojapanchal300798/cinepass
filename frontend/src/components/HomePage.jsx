@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import "../style/homepage.css";
 import { FaSearch, FaLock } from "react-icons/fa";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
+import BookingModal from "./Cinema-booking/BookingModal";
+
+// LOGO
 import logo from "../assets/north-star-logo.jpg";
 
-// MOVIES
+// MOVIE POSTERS
 import spider from "../assets/movies/spider.jpg";
 import xxx from "../assets/movies/xxx.jpg";
 import doraemon from "../assets/movies/doraemon.jpg";
@@ -17,28 +20,38 @@ import hangover from "../assets/movies/hangover.jpg";
 
 const HomePage = () => {
   const navigate = useNavigate();
+
   const [showLocations, setShowLocations] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   const locations = ["Helsinki", "Oulu", "Tampere"];
 
+  // 👉 FIXED: Use image: instead of poster:
   const movies = [
-    { id: 1, title: "Spider-Man: Beyond the Web", poster: spider, showtime: "16:30", availability: "AVAILABLE" },
-    { id: 2, title: "xXx: Return of Xander Cage", poster: xxx, showtime: "16:30", availability: "AVAILABLE" },
-    { id: 3, title: "Doraemon: Nobita and the Sky Kingdom", poster: doraemon, showtime: "16:30", availability: "AVAILABLE" },
-    { id: 4, title: "The Last Journey", poster: lastjourney, showtime: "16:30", availability: "AVAILABLE" },
-    { id: 5, title: "Black Panther: Shadow Kingdom", poster: blackpanther, showtime: "16:30", availability: "AVAILABLE" },
-    { id: 6, title: "Guardians of the Galaxy: Infinite Stars", poster: guardians, showtime: "16:30", availability: "AVAILABLE" },
-    { id: 7, title: "Captain America: Shield of Liberty", poster: captain, showtime: "16:30", availability: "AVAILABLE" },
-    { id: 8, title: "The Hangover Returns", poster: hangover, showtime: "16:30", availability: "AVAILABLE" },
+    { id: 1, title: "Spider-Man: Beyond the Web", image: spider, showtime: "16:30", availability: "AVAILABLE" },
+    { id: 2, title: "xXx: Return of Xander Cage", image: xxx, showtime: "16:30", availability: "AVAILABLE" },
+    { id: 3, title: "Doraemon: Nobita and the Sky Kingdom", image: doraemon, showtime: "16:30", availability: "AVAILABLE" },
+    { id: 4, title: "The Last Journey", image: lastjourney, showtime: "16:30", availability: "AVAILABLE" },
+    { id: 5, title: "Black Panther: Shadow Kingdom", image: blackpanther, showtime: "16:30", availability: "AVAILABLE" },
+    { id: 6, title: "Guardians of the Galaxy: Infinite Stars", image: guardians, showtime: "16:30", availability: "AVAILABLE" },
+    { id: 7, title: "Captain America: Shield of Liberty", image: captain, showtime: "16:30", availability: "AVAILABLE" },
+    { id: 8, title: "The Hangover Returns", image: hangover, showtime: "16:30", availability: "AVAILABLE" },
   ];
+
+  // OPEN BOOKING MODAL
+  const openBookingModal = (movie) => {
+    setSelectedMovie(movie);
+    setShowModal(true);
+  };
 
   return (
     <div className="mobile-wrapper">
       <div className="mobile-container">
 
-        {/* TOP HEADER */}
+        {/* HEADER */}
         <div className="header">
-          <img src={logo} className="header-logo" alt="logo" />
+          <img src={logo} className="header-logo" alt="North Star Logo" />
           <span className="header-title">NORTH STAR</span>
 
           <div className="header-right">
@@ -47,11 +60,10 @@ const HomePage = () => {
           </div>
         </div>
 
-        {/* WHITE NAV BAR */}
+        {/* NAVIGATION */}
         <div className="top-nav-bar">
           <button className="top-nav-btn">Movies</button>
 
-          {/* LOCATIONS DROPDOWN */}
           <div className="location-container">
             <button
               className="top-nav-btn"
@@ -69,7 +81,6 @@ const HomePage = () => {
             )}
           </div>
 
-          {/* LANGUAGE SELECT */}
           <select className="top-nav-lang">
             <option>EN</option>
             <option>FI</option>
@@ -78,10 +89,23 @@ const HomePage = () => {
 
         {/* FEATURED MOVIE */}
         <div className="featured-card">
-          <img src={spider} className="featured-img" alt="" />
+          <img src={spider} className="featured-img" alt="Featured Movie" />
+
           <div className="featured-content">
             <h3>Spider-Man: Beyond the Web</h3>
-            <button className="buy-btn">Buy tickets</button>
+
+            <button
+              className="buy-btn"
+              onClick={() =>
+                openBookingModal({
+                  id: 1,
+                  title: "Spider-Man: Beyond the Web",
+                  image: spider,   // 👉 FIXED
+                })
+              }
+            >
+              Buy tickets
+            </button>
           </div>
         </div>
 
@@ -91,16 +115,29 @@ const HomePage = () => {
         <div className="movie-grid">
           {movies.map((m) => (
             <div key={m.id} className="movie-card">
-          <Link to={`/book/${m.id}`}>  {/* Add Link here to route to specific movie */}
-            <img src={m.poster} className="movie-img" alt={m.title} />
-            <h4 className="movie-name">{m.title}</h4>
-            <p className="movie-info">{m.showtime} — {m.availability}</p>
-          </Link>
-        </div>
+              {/* 👉 FIXED: Use m.image instead of m.poster */}
+              <img
+                src={m.image}
+                className="movie-img"
+                alt={m.title}
+                onClick={() => openBookingModal(m)}
+              />
+
+              <h4 className="movie-name">{m.title}</h4>
+              <p className="movie-info">{m.showtime} — {m.availability}</p>
+            </div>
           ))}
         </div>
-
       </div>
+
+      {/* BOOKING MODAL */}
+      {showModal && (
+        <BookingModal
+          movieList={movies}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+
     </div>
   );
 };
