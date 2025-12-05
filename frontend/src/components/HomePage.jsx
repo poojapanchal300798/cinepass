@@ -23,7 +23,6 @@ const HomePage = () => {
 
   const [showLocations, setShowLocations] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [selectedMovie, setSelectedMovie] = useState(null);
 
   const locations = ["Helsinki", "Oulu", "Tampere"];
 
@@ -41,7 +40,6 @@ const HomePage = () => {
 
   // OPEN BOOKING MODAL
   const openBookingModal = (movie) => {
-    setSelectedMovie(movie);
     setShowModal(true);
   };
 

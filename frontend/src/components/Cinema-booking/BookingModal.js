@@ -54,8 +54,6 @@ function BookingModal({ movieList = [], onClose }) {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [location, setLocation] = useState("");
   const [auditorium, setAuditorium] = useState(null);
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [tickets, setTickets] = useState({ adult: 0, child: 0 });
 
