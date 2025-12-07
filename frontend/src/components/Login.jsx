@@ -6,8 +6,6 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const navigate = useNavigate();
 
-  console.log("Backend URL:", process.env.REACT_APP_BACKEND_URL);
-
   const handleLogin = async () => {
     const username = document.querySelector("#username").value.trim();
     const password = document.querySelector("#password").value.trim();
@@ -28,15 +26,13 @@ const Login = () => {
       );
 
       const data = await response.json();
-      console.log("Response from backend:", data);
 
       if (data.success) {
-        alert("Login Successful!");
+        localStorage.setItem("adminToken", data.token);
         navigate("/admin/dashboard"); // redirect admin
       } else {
         alert(data.message);
       }
-
     } catch (error) {
       console.error("Login Error:", error);
       alert("Server error — backend not responding");

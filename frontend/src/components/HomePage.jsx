@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../style/homepage.css";
-import { FaSearch, FaLock } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 import BookingModal from "./Cinema-booking/BookingModal";
@@ -26,22 +26,16 @@ const HomePage = () => {
 
   const locations = ["Helsinki", "Oulu", "Tampere"];
 
-  // 👉 FIXED: Use image: instead of poster:
   const movies = [
-    { id: 1, title: "Spider-Man: Beyond the Web", image: spider, showtime: "16:30", availability: "AVAILABLE" },
-    { id: 2, title: "xXx: Return of Xander Cage", image: xxx, showtime: "16:30", availability: "AVAILABLE" },
-    { id: 3, title: "Doraemon: Nobita and the Sky Kingdom", image: doraemon, showtime: "16:30", availability: "AVAILABLE" },
-    { id: 4, title: "The Last Journey", image: lastjourney, showtime: "16:30", availability: "AVAILABLE" },
-    { id: 5, title: "Black Panther: Shadow Kingdom", image: blackpanther, showtime: "16:30", availability: "AVAILABLE" },
-    { id: 6, title: "Guardians of the Galaxy: Infinite Stars", image: guardians, showtime: "16:30", availability: "AVAILABLE" },
-    { id: 7, title: "Captain America: Shield of Liberty", image: captain, showtime: "16:30", availability: "AVAILABLE" },
-    { id: 8, title: "The Hangover Returns", image: hangover, showtime: "16:30", availability: "AVAILABLE" },
+    { id: 1, title: "Spider-Man: Beyond the Web", image: spider },
+    { id: 2, title: "xXx: Return of Xander Cage", image: xxx },
+    { id: 3, title: "Doraemon: Nobita and the Sky Kingdom", image: doraemon },
+    { id: 4, title: "The Last Journey", image: lastjourney },
+    { id: 5, title: "Black Panther: Shadow Kingdom", image: blackpanther },
+    { id: 6, title: "Guardians of the Galaxy: Infinite Stars", image: guardians },
+    { id: 7, title: "Captain America: Shield of Liberty", image: captain },
+    { id: 8, title: "The Hangover Returns", image: hangover },
   ];
-
-  // OPEN BOOKING MODAL
-  const openBookingModal = (movie) => {
-    setShowModal(true);
-  };
 
   return (
     <div className="mobile-wrapper">
@@ -51,11 +45,7 @@ const HomePage = () => {
         <div className="header">
           <img src={logo} className="header-logo" alt="North Star Logo" />
           <span className="header-title">NORTH STAR</span>
-
-          <div className="header-right">
-            <FaSearch className="header-icon" />
-            <FaLock className="header-icon" onClick={() => navigate("/admin/login")} />
-          </div>
+          <FaSearch className="header-icon" />
         </div>
 
         {/* NAVIGATION */}
@@ -87,55 +77,44 @@ const HomePage = () => {
 
         {/* FEATURED MOVIE */}
         <div className="featured-card">
-          <img src={spider} className="featured-img" alt="Featured Movie" />
+          <img src={spider} className="featured-img" alt="" />
 
           <div className="featured-content">
             <h3>Spider-Man: Beyond the Web</h3>
-
-            <button
-              className="buy-btn"
-              onClick={() =>
-                openBookingModal({
-                  id: 1,
-                  title: "Spider-Man: Beyond the Web",
-                  image: spider,   // 👉 FIXED
-                })
-              }
-            >
+            <button className="buy-btn" onClick={() => setShowModal(true)}>
               Buy tickets
             </button>
           </div>
         </div>
 
-        {/* MOVIE LIST */}
         <h3 className="section-title">Now in the cinema</h3>
 
         <div className="movie-grid">
           {movies.map((m) => (
             <div key={m.id} className="movie-card">
-              {/* 👉 FIXED: Use m.image instead of m.poster */}
               <img
                 src={m.image}
                 className="movie-img"
                 alt={m.title}
-                onClick={() => openBookingModal(m)}
+                onClick={() => setShowModal(true)}
               />
-
               <h4 className="movie-name">{m.title}</h4>
-              <p className="movie-info">{m.showtime} — {m.availability}</p>
             </div>
           ))}
         </div>
+
+        {/* HIDDEN ADMIN LOGIN (NOT SHOWN TO USERS) */}
+        <div
+          style={{ textAlign: "center", marginTop: "20px", opacity: 0.3 }}
+          onClick={() => navigate("/admin/login")}
+        >
+          Admin Access
+        </div>
       </div>
 
-      {/* BOOKING MODAL */}
       {showModal && (
-        <BookingModal
-          movieList={movies}
-          onClose={() => setShowModal(false)}
-        />
+        <BookingModal movieList={movies} onClose={() => setShowModal(false)} />
       )}
-
     </div>
   );
 };

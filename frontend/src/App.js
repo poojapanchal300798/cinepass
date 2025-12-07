@@ -1,46 +1,64 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-// MAIN PAGES
+// USER PAGES
 import HomePage from "./components/HomePage";
+
+// ADMIN PAGES
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
-
-// MANAGE SHOWS (folder + file)
 import ManageShows from "./components/Manageshows/Manageshows";
 
-// MOVIE BOOKING PAGES
-import MovieDetails from "./components/Cinema-booking/MovieDetails";  // Correct path
-import LocationSelection from "./components/Cinema-booking/LocationSelection";  // Correct path
-import DateSelection from "./components/Cinema-booking/DateSelection";  // Correct path
-import TimeSelection from "./components/Cinema-booking/TimeSelection";  // Correct path
-import SeatSelection from "./components/Cinema-booking/SeatSelection";  // Correct path
-import Tickets from "./components/Cinema-booking/Tickets";  // New page for ticket selection
-import Payment from "./components/Cinema-booking/Payment";  // Correct path
+// ADMIN ROUTE PROTECTION
+import ProtectedRoute from "./components/ProtectedRoute";
+
+// USER BOOKING PAGES
+import MovieDetails from "./components/Cinema-booking/MovieDetails";
+import LocationSelection from "./components/Cinema-booking/LocationSelection";
+import DateSelection from "./components/Cinema-booking/DateSelection";
+import TimeSelection from "./components/Cinema-booking/TimeSelection";
+import SeatSelection from "./components/Cinema-booking/SeatSelection";
+import Tickets from "./components/Cinema-booking/Tickets";
+import Payment from "./components/Cinema-booking/Payment";
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* USER HOME PAGE */}
+
+        {/* USER HOME */}
         <Route path="/" element={<HomePage />} />
 
-        {/* ADMIN LOGIN PAGE */}
+        {/* ADMIN LOGIN */}
         <Route path="/admin/login" element={<Login />} />
 
-        {/* ADMIN DASHBOARD */}
-        <Route path="/admin/dashboard" element={<Dashboard />} />
+        {/* ADMIN DASHBOARD (Protected) */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* MANAGE SHOWS PAGE */}
-        <Route path="/admin/shows" element={<ManageShows />} />
+        {/* MANAGE SHOWS (Protected) */}
+        <Route
+          path="/admin/shows"
+          element={
+            <ProtectedRoute>
+              <ManageShows />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* MOVIE BOOKING FLOW */}
-        <Route path="/book/:movieId" element={<MovieDetails />} /> {/* Dynamic Route */}
+        {/* BOOKING FLOW */}
+        <Route path="/book/:movieId" element={<MovieDetails />} />
         <Route path="/book/location" element={<LocationSelection />} />
         <Route path="/book/date" element={<DateSelection />} />
         <Route path="/book/time" element={<TimeSelection />} />
         <Route path="/book/seats" element={<SeatSelection />} />
-        <Route path="/book/tickets" element={<Tickets />} />  {/* Tickets page */}
+        <Route path="/book/tickets" element={<Tickets />} />
         <Route path="/book/payment" element={<Payment />} />
       </Routes>
     </Router>
