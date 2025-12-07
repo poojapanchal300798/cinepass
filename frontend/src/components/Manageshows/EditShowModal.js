@@ -1,121 +1,47 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Form, Button } from "react-bootstrap";
+import { useState, useEffect } from "react";
 
-const EditShowModal = ({ show, onClose, onSubmit }) => {
-  const [showData, setShowData] = useState(show);
+export default function EditShowModal({ show, onClose, onSubmit }) {
+  const [form, setForm] = useState(show);
 
-  // Pre-fill form with show data when the modal is opened
   useEffect(() => {
-    setShowData(show);
+    setForm(show);
   }, [show]);
 
   const handleChange = (e) => {
-    setShowData({
-      ...showData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = () => {
-    onSubmit(showData); // Submit the updated show data
-    onClose(); // Close the modal
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   return (
-    <Modal show={true} onHide={onClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>Edit Show</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Form.Group controlId="formShowName">
-            <Form.Label>Show Name</Form.Label>
-            <Form.Control
-              type="text"
-              name="name"
-              value={showData.name}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
+    <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center">
+      <div className="bg-[#0a1f2d] p-6 rounded-xl w-96 border border-[#1e4152]">
+        <h2 className="text-xl font-bold mb-4">Edit Show</h2>
 
-          <Form.Group controlId="formDate">
-            <Form.Label>Date & Time</Form.Label>
-            <Form.Control
-              type="datetime-local"
-              name="date"
-              value={showData.date}
+        {Object.keys(form).map((key) => (
+          key !== "id" && (
+            <input
+              key={key}
+              name={key}
+              value={form[key]}
+              placeholder={key}
+              className="mb-2 p-2 w-full bg-[#0f2b3a] border border-[#1e4152] rounded"
               onChange={handleChange}
-              required
             />
-          </Form.Group>
+          )
+        ))}
 
-          <Form.Group controlId="formLocation">
-            <Form.Label>Location</Form.Label>
-            <Form.Control
-              type="text"
-              name="location"
-              value={showData.location}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
+        <div className="flex justify-end gap-3 mt-4">
+          <button onClick={onClose} className="px-4 py-2 bg-gray-500 rounded">
+            Cancel
+          </button>
 
-          <Form.Group controlId="formScreen">
-            <Form.Label>Screen</Form.Label>
-            <Form.Control
-              type="text"
-              name="screen"
-              value={showData.screen}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group controlId="formAdultPrice">
-            <Form.Label>Adult Price</Form.Label>
-            <Form.Control
-              type="text"
-              name="adultPrice"
-              value={showData.adultPrice}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group controlId="formKidPrice">
-            <Form.Label>Kid Price</Form.Label>
-            <Form.Control
-              type="text"
-              name="kidPrice"
-              value={showData.kidPrice}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group controlId="formSeats">
-            <Form.Label>Seats</Form.Label>
-            <Form.Control
-              type="text"
-              name="seats"
-              value={showData.seats}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
-          Close
-        </Button>
-        <Button variant="primary" onClick={handleSubmit}>
-          Save Changes
-        </Button>
-      </Modal.Footer>
-    </Modal>
+          <button
+            onClick={() => onSubmit(form)}
+            className="px-4 py-2 bg-sky-500 rounded"
+          >
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
   );
-};
-
-export default EditShowModal;
+}

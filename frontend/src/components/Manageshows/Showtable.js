@@ -1,4 +1,4 @@
-export default function ShowTable({ shows }) {
+export default function ShowTable({ shows, onEdit, onDelete }) {
   return (
     <div className="bg-[#0a1f2d] border border-[#1e4152] rounded-xl overflow-hidden">
       <table className="w-full text-left text-white">
@@ -10,7 +10,6 @@ export default function ShowTable({ shows }) {
             <th className="p-3">Screen</th>
             <th className="p-3">Adult Price</th>
             <th className="p-3">Kid Price</th>
-            <th className="p-3">Seats</th>
             <th className="p-3">Actions</th>
           </tr>
         </thead>
@@ -24,11 +23,21 @@ export default function ShowTable({ shows }) {
               <td className="p-3">{show.screen}</td>
               <td className="p-3">€{show.adult_price}</td>
               <td className="p-3">€{show.kid_price}</td>
-              <td className="p-3">{show.seats}</td>
 
               <td className="p-3 flex gap-4">
-                <button className="text-sky-400 hover:text-sky-200">✏️</button>
-                <button className="text-red-400 hover:text-red-200">🗑️</button>
+                <button
+                  onClick={() => onEdit(show)}
+                  className="text-sky-400 hover:text-sky-200"
+                >
+                  ✏️
+                </button>
+
+                <button
+                  onClick={() => onDelete(show.id)}
+                  className="text-red-400 hover:text-red-200"
+                >
+                  🗑️
+                </button>
               </td>
             </tr>
           ))}

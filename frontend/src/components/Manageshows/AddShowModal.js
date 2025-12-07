@@ -2,13 +2,13 @@ import { useState } from "react";
 
 export default function AddShowModal({ onClose, onSubmit }) {
   const [form, setForm] = useState({
-    name: "",
-    datetime: "",
-    location: "",
+    movieId: "",
+    locationId: "",
+    date: "",
+    time: "",
     screen: "",
-    adult_price: "",
-    kid_price: "",
-    seats: "",
+    adultPrice: "",
+    childPrice: "",
   });
 
   const handleChange = (e) => {
@@ -34,6 +34,7 @@ export default function AddShowModal({ onClose, onSubmit }) {
           <button onClick={onClose} className="px-4 py-2 bg-gray-500 rounded">
             Cancel
           </button>
+
           <button
             onClick={() => onSubmit(form)}
             className="px-4 py-2 bg-sky-500 rounded"

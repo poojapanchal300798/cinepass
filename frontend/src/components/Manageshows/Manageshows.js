@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import ShowTable from "./Showtable";
 import AddShowModal from "./AddShowModal";
+import EditShowModal from "./EditShowModal";
 
 export default function ManageShows() {
   const [shows, setShows] = useState([]);
   const [search, setSearch] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [editShow, setEditShow] = useState(null);
 
   useEffect(() => {
     fetchShows();
@@ -15,7 +17,19 @@ export default function ManageShows() {
     try {
       const res = await fetch("http://localhost:5000/api/shows");
       const data = await res.json();
-      setShows(data);
+
+      // ⭐ MAP API RESPONSE → UI format
+      const mapped = data.map((s) => ({
+        id: s.id,
+        name: s.movie_title,
+        datetime: `${s.date} ${s.time}`,
+        location: s.location_name,
+        screen: s.screen,
+        adult_price: s.adult_price,
+        kid_price: s.child_price,
+      }));
+
+      setShows(mapped);
     } catch (err) {
       console.log("Error fetching shows:", err);
     }
@@ -30,6 +44,24 @@ export default function ManageShows() {
 
     fetchShows();
     setIsAddModalOpen(false);
+  };
+
+  const handleUpdateShow = async (updated) => {
+    await fetch(`http://localhost:5000/api/shows/${updated.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updated),
+    });
+
+    fetchShows();
+  };
+
+  const handleDeleteShow = async (id) => {
+    await fetch(`http://localhost:5000/api/shows/${id}`, {
+      method: "DELETE",
+    });
+
+    fetchShows();
   };
 
   return (
@@ -49,7 +81,7 @@ export default function ManageShows() {
           onClick={() => setIsAddModalOpen(true)}
           className="bg-sky-500 hover:bg-sky-600 px-4 py-2 rounded-lg"
         >
-          + Add New Show
+          + Add Show
         </button>
       </div>
 
@@ -57,6 +89,8 @@ export default function ManageShows() {
         shows={shows.filter((s) =>
           s.name.toLowerCase().includes(search.toLowerCase())
         )}
+        onEdit={(s) => setEditShow(s)}
+        onDelete={handleDeleteShow}
       />
 
       {isAddModalOpen && (
@@ -65,8 +99,14 @@ export default function ManageShows() {
           onSubmit={handleAddShow}
         />
       )}
+
+      {editShow && (
+        <EditShowModal
+          show={editShow}
+          onClose={() => setEditShow(null)}
+          onSubmit={handleUpdateShow}
+        />
+      )}
     </div>
   );
 }
-
-
