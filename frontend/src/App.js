@@ -51,9 +51,9 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/movie-details/:movieId" element={<MovieDetails />} />
 
         {/* BOOKING FLOW */}
-        <Route path="/book/:movieId" element={<MovieDetails />} />
         <Route path="/book/location" element={<LocationSelection />} />
         <Route path="/book/date" element={<DateSelection />} />
         <Route path="/book/time" element={<TimeSelection />} />

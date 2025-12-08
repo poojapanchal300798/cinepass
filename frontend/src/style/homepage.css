@@ -12,13 +12,12 @@
 }
 
 .mobile-container {
-  width: 375px;
+  width: 100%;
   background: linear-gradient(#002238, #003b50, #005469);
   border-radius: 25px;
   padding: 20px;
   color: white;
   font-family: 'Inter', sans-serif;
-  overflow-y: auto;
   max-height: 95vh;
 }
 
@@ -69,6 +68,7 @@
   font-weight: 600;
   color: #003049;
   box-shadow: 0 3px 6px rgba(0,0,0,0.18);
+  gap: 5px;
 }
 
 /* Buttons inside the bar */
@@ -86,7 +86,7 @@
 .top-nav-lang {
   background: #eef6ff;
   border: none;
-  padding: 8px 12px;
+  padding: 12px;
   border-radius: 10px;
   color: #003049;
   cursor: pointer;
@@ -197,10 +197,44 @@
   margin-top: 8px;
   font-size: 14px;
   font-weight: 600;
+  text-decoration: none;
+  color: white;
+}
+
+.movie-name:hover{
+  color: #002645;
 }
 
 .movie-info {
   margin-top: 3px;
   opacity: 0.8;
   font-size: 12px;
+}
+
+
+/* Seat Design */
+
+.seat-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr); /* 10 equal-width columns */
+  gap: 3px; /* Optional: space between seats */
+}
+
+.seat {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: 2px solid #4fa3e5;
+  padding: 6px;
+  border-radius: 5px;
+  font-size: 14px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+}
+
+.seat:hover {
+  background-color: #45a049; /* Change color on hover */
 }

@@ -48,7 +48,7 @@ const generateSeats = (totalSeats) => {
   return seatList;
 };
 
-function BookingModal({ movieList = [], onClose }) {
+function BookingModal({ parent='homepage', movieList = [], onClose, imgUrl=null }) {
   const [step, setStep] = useState(1);
 
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -56,6 +56,12 @@ function BookingModal({ movieList = [], onClose }) {
   const [auditorium, setAuditorium] = useState(null);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [tickets, setTickets] = useState({ adult: 0, child: 0 });
+
+  const occupiedSeats = [
+    "A1", "A3", "A5", "B2", "B6", "C4", "C8", "D7", 
+    "D10", "E1", "E9", "F3", "F5", "G2", "H4", "I7", 
+    "I10", "J1", "J8", "J12"
+  ];
 
   const goNext = () => setStep(step + 1);
   const goBack = () => setStep(step - 1);
@@ -120,7 +126,7 @@ function BookingModal({ movieList = [], onClose }) {
                   }`}
                   onClick={() => {
                     setSelectedMovie(m);
-                    goNext(); // auto next when movie clicked
+                    goNext();
                   }}
                 >
                   <img src={m.image} className="movie-select-img" alt="" />
@@ -203,9 +209,12 @@ function BookingModal({ movieList = [], onClose }) {
                 <div
                   key={seat}
                   className={`seat ${
-                    selectedSeats.includes(seat) ? "selected" : ""
+                    selectedSeats.includes(seat)
+                    ? "selected"
+                    : occupiedSeats.includes(seat)
+                    ? "occupied" : ""
                   }`}
-                  onClick={() => toggleSeat(seat)}
+                  onClick={() => !occupiedSeats.includes(seat) && toggleSeat(seat)}
                 >
                   {seat}
                 </div>
@@ -226,6 +235,7 @@ function BookingModal({ movieList = [], onClose }) {
         )}
 
         {/* ---------------- STEP 5: SELECT TICKETS ---------------- */}
+        {/*
         {step === 5 && (
           <div className="step-content">
             <h3 className="step-title">Select Tickets</h3>
@@ -266,6 +276,83 @@ function BookingModal({ movieList = [], onClose }) {
             </div>
           </div>
         )}
+        */}
+        {/* ---------------- STEP 5: SELECT TICKETS ---------------- */}
+        {step === 5 && (
+          <div className="step-content">
+            <h3 className="step-title">Select Tickets</h3>
+
+            {/* Adult Ticket Selection */}
+            <div className="ticket-row">
+              <div>Adult (€12)</div>
+              <div className="ticket-controls">
+                <button 
+                  onClick={() => setTickets({
+                    ...tickets, 
+                    adult: Math.max(0, tickets.adult - 1)
+                  })}
+                >-</button>
+
+                <span>{tickets.adult}</span>
+
+                <button
+                  onClick={() => {
+                    if (tickets.adult < selectedSeats.length - tickets.child) {
+                      setTickets({
+                        ...tickets,
+                        adult: tickets.adult + 1
+                      });
+                    }
+                  }}
+                  disabled={tickets.adult + tickets.child >= selectedSeats.length}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            {/* Child Ticket Selection */}
+            <div className="ticket-row">
+              <div>Child (€8)</div>
+              <div className="ticket-controls">
+                <button 
+                  onClick={() => setTickets({
+                    ...tickets,
+                    child: Math.max(0, tickets.child - 1)
+                  })}
+                >-</button>
+
+                <span>{tickets.child}</span>
+
+                <button
+                  onClick={() => {
+                    if (tickets.child < selectedSeats.length - tickets.adult) {
+                      setTickets({
+                        ...tickets,
+                        child: tickets.child + 1
+                      });
+                    }
+                  }}
+                  disabled={tickets.adult + tickets.child >= selectedSeats.length}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <div className="modal-buttons">
+              <button className="back-btn" onClick={goBack}>Back</button>
+              <button 
+                className="next-btn"
+                onClick={goNext}
+                disabled={tickets.adult + tickets.child === 0}
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        )}
+
 
         {/* ---------------- STEP 6: PAYMENT ---------------- */}
         {step === 6 && (
