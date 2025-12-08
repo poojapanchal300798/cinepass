@@ -8,20 +8,18 @@ const showRoutes = require("./routes/showRoutes");
 
 const app = express();
 
-
 // --------------------------------------
-// CORS FIX (for localhost & Azure)
+// CORS
 // --------------------------------------
 app.use(
   cors({
     origin: ["http://localhost:3000", process.env.FRONTEND_URL].filter(Boolean),
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
 app.use(express.json());
-
 
 // --------------------------------------
 // API ROUTES
@@ -29,18 +27,31 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/api/shows", showRoutes);
 
-
 // --------------------------------------
-// FRONTEND BUILD SERVING (IMPORTANT)
+// FRONTEND SERVING (LOCAL + AZURE)
 // --------------------------------------
-const frontendPath = path.join(__dirname, "..", "frontend", "build");
 
-app.use(express.static(frontendPath));
+// Local development path (VS Code)
+const localFrontend = path.join(__dirname, "..", "frontend", "build");
 
+// Azure path
+const azureFrontend = "/home/site/wwwroot";
+
+// Detect Azure App Service
+const isAzure = process.env.WEBSITE_INSTANCE_ID || process.env.WEBSITE_SITE_NAME;
+
+// Choose the correct folder
+const finalFrontendPath = isAzure ? azureFrontend : localFrontend;
+
+console.log("Serving frontend from:", finalFrontendPath);
+
+// Static files
+app.use(express.static(finalFrontendPath));
+
+// SPA fallback
 app.get("*", (req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"));
+  res.sendFile(path.join(finalFrontendPath, "index.html"));
 });
-
 
 // --------------------------------------
 // START SERVER
