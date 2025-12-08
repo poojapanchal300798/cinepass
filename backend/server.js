@@ -31,9 +31,18 @@ app.use("/api/shows", showRoutes);
 // FRONTEND SERVING FOR LOCAL + AZURE
 // --------------------------------------
 
-// We will store the frontend build inside:
-// backend/frontend-build/
-const finalFrontendPath = path.join(__dirname, "frontend-build");
+// LOCAL DEVELOPMENT: serve backend/frontend/build
+const localFrontendPath = path.join(__dirname, "frontend", "build");
+
+// AZURE PATH: GitHub Actions places build here:
+// /home/site/wwwroot/frontend/build
+const azureFrontendPath = "/home/site/wwwroot/frontend/build";
+
+// Detect Azure runtime using environment variable
+const isAzure = !!process.env.WEBSITE_SITE_NAME;
+
+// Select correct folder
+const finalFrontendPath = isAzure ? azureFrontendPath : localFrontendPath;
 
 console.log("📌 Serving frontend from:", finalFrontendPath);
 
@@ -51,5 +60,5 @@ app.get("*", (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Backend running at http://localhost:${PORT}`);
+  console.log(`🚀 Backend running on port ${PORT}`);
 });
