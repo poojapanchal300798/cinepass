@@ -20,10 +20,13 @@ import TimeSelection from "./components/Cinema-booking/TimeSelection";
 import SeatSelection from "./components/Cinema-booking/SeatSelection";
 import Tickets from "./components/Cinema-booking/Tickets";
 import Payment from "./components/Cinema-booking/Payment";
+import Footer from "./components/Footer";
+import SuccessView from "./components/Cinema-booking/views/SuccessView"
 
 function App() {
   return (
     <Router>
+      <div className="app-wrapper">
       <Routes>
 
         {/* USER HOME */}
@@ -60,7 +63,11 @@ function App() {
         <Route path="/book/seats" element={<SeatSelection />} />
         <Route path="/book/tickets" element={<Tickets />} />
         <Route path="/book/payment" element={<Payment />} />
+
+        <Route path="/success" element={<SuccessView />} />
       </Routes>
+      <Footer />
+      </div>
     </Router>
   );
 }

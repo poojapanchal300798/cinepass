@@ -51,14 +51,14 @@ const HomePage = () => {
         {/* NAVIGATION */}
         <div className="top-nav-bar">
           <button className="top-nav-btn">Movies</button>
+            
+          <div className="location-container">
             <button
               className="top-nav-btn"
               onClick={() => setShowLocations(!showLocations)}
             >
               Locations ▾
             </button>
-          <div className="location-container">
-
             {showLocations && (
               <div className="location-dropdown">
                 {locations.map((loc) => (

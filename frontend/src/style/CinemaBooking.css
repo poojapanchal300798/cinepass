@@ -685,9 +685,6 @@ display: flex;
     object-fit: cover;
 }
 .movie-details-page{
-  position: absolute;
-  top: 10px;
-  left: 0;
   width: 100%;
 }
 .book-tickets-btn{
@@ -700,4 +697,133 @@ display: flex;
 .section-container.trailer-section{
   width: 80%;
   max-width: 600px;
+}
+
+/* PAYMNET */
+.payment-box,
+.summary-box {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 18px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.payment-input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #0a3c52;
+  color: white;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.payment-row {
+  display: flex;
+  gap: 15px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+.summary-row.total {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffcc00;
+}
+
+
+/* FOOTER */
+.footer-container {
+  background: #052235;
+  padding: 40px 20px;
+  color: #e3f0ff;
+  font-family: "Inter", sans-serif;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-top {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.footer-logo {
+  width: 55px;
+  border-radius: 8px;
+}
+
+.footer-brand {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.footer-sub {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.footer-divider {
+  border: none;
+  border-top: 1px solid #1a3b52;
+  margin: 25px 0;
+}
+
+.footer-tagline {
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+.footer-columns {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.footer-column {
+  flex: 1;
+  min-width: 150px;
+  margin-bottom: 20px;
+}
+
+.footer-column h4 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.footer-column a, 
+.footer-column p {
+  display: block;
+  margin-bottom: 8px;
+  color: #cce4f7;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.footer-column a:hover {
+  color: white;
+}
+
+.footer-copy {
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.6;
 }

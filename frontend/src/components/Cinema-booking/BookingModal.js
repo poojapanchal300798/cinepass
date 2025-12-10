@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import {PaymentElement, useCheckout} from '@stripe/react-stripe-js/checkout';
 import "../../style/BookingModal.css";
+import CheckoutView from "./views/CheckoutView";
 
 // ---------------- CINEMA DATA (Professor Requirements) ---------------- //
 const cinemaData = {
@@ -358,11 +360,86 @@ function BookingModal({ parent='homepage', movieList = [], onClose, imgUrl=null 
         {step === 6 && (
           <div className="step-content">
             <h3 className="step-title">Payment</h3>
-            <p>Payment UI coming soon...</p>
+            {/* <div className="payment-box">
+              <div className="form-group">
+                <label>Card Number</label>
+                <input
+                  type="text"
+                  placeholder="1234 5678 9012 3456"
+                  className="payment-input"
+                />
+              </div>
+
+              <div className="payment-row">
+                <div className="form-group">
+                  <label>Expiry Date</label>
+                  <input
+                    type="text"
+                    placeholder="MM/YY"
+                    className="payment-input"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>CVV</label>
+                  <input
+                    type="text"
+                    placeholder="123"
+                    className="payment-input"
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Cardholder Name</label>
+                <input
+                  type="text"
+                  placeholder="John Doe"
+                  className="payment-input"
+                />
+              </div>
+            </div> */}
+            <CheckoutView totalAmount={tickets.adult * 12 + tickets.child * 8}/>
+
+            {/* Booking Summary */}
+            <h3 className="step-title" style={{ marginTop: "20px" }}>
+              Booking Summary
+            </h3>
+
+            <div className="summary-box">
+              <div className="summary-row">
+                <span>Movie:</span>
+                <strong>{selectedMovie?.title}</strong>
+              </div>
+
+              <div className="summary-row">
+                <span>Location:</span>
+                <strong>{cinemaData[location]?.name}</strong>
+              </div>
+
+              <div className="summary-row">
+                <span>Date & Time:</span>
+                <strong>2025-11-26 at 16:30</strong>
+              </div>
+
+              <div className="summary-row">
+                <span>Seats:</span>
+                <strong>{selectedSeats.join(", ")}</strong>
+              </div>
+
+              <div className="summary-row total">
+                <span>Total Amount</span>
+                <strong>
+                  €
+                  {tickets.adult * 12 + tickets.child * 8}
+                  .00
+                </strong>
+              </div>
+            </div>
 
             <div className="modal-buttons">
               <button className="back-btn" onClick={goBack}>Back</button>
-              <button className="next-btn" onClick={onClose}>Finish</button>
+              <button className="next-btn" onClick={onClose}>Cancel</button>
             </div>
           </div>
         )}

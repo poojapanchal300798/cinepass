@@ -18,9 +18,7 @@
   padding: 20px;
   color: white;
   font-family: 'Inter', sans-serif;
-  max-height: 95vh;
 }
-
 /* ============================================
    HEADER (logo + search + lock)
 ============================================ */
@@ -71,6 +69,10 @@
   gap: 5px;
 }
 
+.location-container .top-nav-btn{
+  width: 100% !important;
+}
+
 /* Buttons inside the bar */
 .top-nav-btn {
   background: #eef6ff;
@@ -99,12 +101,13 @@
 
 .location-container {
   position: relative;
+  margin-right: auto;
 }
 
 .location-dropdown {
   position: absolute;
-  top: 45px;
-  left: 0;
+  top: 52px;
+  left: 10px;
   background: #ffffff;
   width: 140px;
   border-radius: 10px;
@@ -124,6 +127,19 @@
 
 .location-item:hover {
   background: #d6ecff;
+}
+
+form.checkout-form button{
+  padding: 5px 30px 8px 30px !important;
+    width: fit-content !important;
+    background-color: #0064f8 !important;
+    border: 2px solid #0064f8 !important;
+}
+form.checkout-form button:hover{
+  border-color: #84a5d7 !important;
+}
+form.checkout-form p{
+  font-size: 12px;
 }
 
 /* ============================================
