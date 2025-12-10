@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import {PaymentElement, useCheckout} from '@stripe/react-stripe-js/checkout';
 import "../../style/BookingModal.css";
 import CheckoutView from "./views/CheckoutView";
 
