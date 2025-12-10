@@ -78,7 +78,7 @@ function MovieDetails() {
             } catch (err) {
                 console.error("Error fetching movie details:", err);
                 setError("Failed to load movie details. Check the API route /api/movies/:id.");
-                const fallbackMovie = movies.find(element => element.id == movieId);
+                const fallbackMovie = movies.find(element => element.id === Number(movieId));
                 setMovie(fallbackMovie);
             } finally {
                 setLoading(false);
