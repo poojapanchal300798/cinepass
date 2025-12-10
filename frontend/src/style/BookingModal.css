@@ -220,6 +220,7 @@
   display: flex;
   justify-content: space-between;
   margin-top: 15px;
+  gap: 3px;
 }
 
 .back-btn {

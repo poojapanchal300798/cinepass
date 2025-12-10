@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../style/homepage.css";
 import { FaSearch } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import BookingModal from "./Cinema-booking/BookingModal";
 
@@ -51,7 +51,7 @@ const HomePage = () => {
         {/* NAVIGATION */}
         <div className="top-nav-bar">
           <button className="top-nav-btn">Movies</button>
-
+            
           <div className="location-container">
             <button
               className="top-nav-btn"
@@ -59,7 +59,6 @@ const HomePage = () => {
             >
               Locations ▾
             </button>
-
             {showLocations && (
               <div className="location-dropdown">
                 {locations.map((loc) => (
@@ -98,7 +97,9 @@ const HomePage = () => {
                 alt={m.title}
                 onClick={() => setShowModal(true)}
               />
-              <h4 className="movie-name">{m.title}</h4>
+              <Link to={`/movie-details/${m.id}`} className="movie-name">
+                <h4>{m.title}</h4>
+              </Link>
             </div>
           ))}
         </div>
@@ -113,7 +114,7 @@ const HomePage = () => {
       </div>
 
       {showModal && (
-        <BookingModal movieList={movies} onClose={() => setShowModal(false)} />
+        <BookingModal parent='homepage' movieList={movies} onClose={() => setShowModal(false)} />
       )}
     </div>
   );

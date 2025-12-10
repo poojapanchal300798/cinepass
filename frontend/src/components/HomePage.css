@@ -1,0 +1,336 @@
+/* HomePage.css - Clean Mobile Layout */
+
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #0a1929;
+  color: #ffffff;
+  line-height: 1.5;
+}
+
+/* ===== HOMEPAGE CONTAINER ===== */
+.homepage {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* ===== HERO SECTION ===== */
+.hero-section {
+  background: linear-gradient(rgba(10, 25, 41, 0.9), rgba(10, 25, 41, 0.9)),
+              url('https://images.unsplash.com/photo-1489599809516-9827b6d1cf13?w=800&q=80');
+  background-size: cover;
+  background-position: center;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 100%;
+}
+
+.hero-content h1 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.hero-content p {
+  font-size: 1rem;
+  color: #caf0f8;
+  margin-bottom: 25px;
+}
+
+.cta-button {
+  background: linear-gradient(135deg, #0077b6, #00b4d8);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 300px;
+  display: block;
+  margin: 0 auto;
+}
+
+.cta-button:active {
+  transform: scale(0.98);
+}
+
+/* ===== FEATURED MOVIES ===== */
+.featured-movies {
+  padding: 30px 20px;
+  background: #0d1f33;
+}
+
+.featured-movies h2 {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.movies-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.movie-card {
+  background: #132f4c;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 180, 216, 0.1);
+}
+
+.movie-poster {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.movie-info {
+  padding: 15px;
+}
+
+.movie-info h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.movie-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.genre, .duration, .rating {
+  background: rgba(0, 180, 216, 0.1);
+  color: #90e0ef;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+}
+
+.rating {
+  background: rgba(0, 116, 217, 0.3);
+  color: #caf0f8;
+}
+
+.movie-description {
+  font-size: 0.9rem;
+  color: #a8d5e2;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.book-movie-btn {
+  background: linear-gradient(135deg, #0077b6, #0096c7);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  width: 100%;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+/* ===== HOW IT WORKS ===== */
+.how-it-works {
+  padding: 30px 20px;
+  background: #0a1929;
+}
+
+.how-it-works h2 {
+  font-size: 1.4rem;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.step {
+  background: #132f4c;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  border: 1px solid rgba(0, 180, 216, 0.1);
+}
+
+.step-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #0077b6, #00b4d8);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+  font-weight: bold;
+}
+
+.step h3 {
+  font-size: 0.95rem;
+  margin-bottom: 5px;
+}
+
+.step p {
+  font-size: 0.85rem;
+  color: #a8d5e2;
+}
+
+/* ===== QUICK LINKS ===== */
+.quick-links {
+  padding: 30px 20px;
+  background: #0d1f33;
+}
+
+.quick-links h2 {
+  font-size: 1.4rem;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.link-card {
+  background: #132f4c;
+  border: 1px solid rgba(0, 180, 216, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.link-card:active {
+  background: #1a3d5c;
+}
+
+.link-icon {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.link-card h3 {
+  font-size: 0.95rem;
+  margin-bottom: 5px;
+}
+
+.link-card p {
+  font-size: 0.85rem;
+  color: #a8d5e2;
+}
+
+/* ===== FOOTER ===== */
+.homepage-footer {
+  background: #0a1a2a;
+  padding: 25px 20px;
+  text-align: center;
+  border-top: 1px solid rgba(0, 180, 216, 0.1);
+}
+
+.homepage-footer p {
+  color: #a8d5e2;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.footer-links button {
+  background: rgba(0, 180, 216, 0.1);
+  color: #90e0ef;
+  border: 1px solid rgba(0, 180, 216, 0.2);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.footer-links button:active {
+  background: rgba(0, 180, 216, 0.2);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 360px) {
+  .hero-content h1 {
+    font-size: 1.6rem;
+  }
+  
+  .hero-content p {
+    font-size: 0.9rem;
+  }
+  
+  .movie-poster {
+    height: 180px;
+  }
+  
+  .steps,
+  .links-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+}
+
+/* ===== TOUCH FIXES ===== */
+button {
+  min-height: 44px;
+  touch-action: manipulation;
+}
+
+button:active {
+  opacity: 0.9;
+}
+
+/* ===== NO DUPLICATES FIX ===== */
+/* Remove any duplicate content */
+.movie-card::before,
+.movie-card::after,
+.movie-info::before,
+.movie-info::after {
+  content: none !important;
+}
+
+/* Ensure each element shows only once */
+* {
+  background-repeat: no-repeat;
+}
+
+/* Make sure there's no stacking causing duplicates */
+.movie-card {
+  position: relative;
+  z-index: 1;
+}
