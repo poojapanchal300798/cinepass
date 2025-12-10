@@ -10,13 +10,18 @@ function CheckoutView({ totalAmount }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!totalAmount || totalAmount <= 0) return;
+
     async function createSession() {
       try {
-        const res = await fetch("/api/create-checkout-session", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ price: totalAmount }),
-        });
+        const res = await fetch(
+          `${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/create-checkout-session`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ price: totalAmount }),
+          }
+        );
 
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -24,11 +29,11 @@ function CheckoutView({ totalAmount }) {
 
         const data = await res.json();
 
-        if (data?.clientSecret) {
-          setClientSecret(data.clientSecret);
-        } else {
+        if (!data.client_secret) {
           throw new Error("Missing client secret");
         }
+
+        setClientSecret(data.client_secret);
       } catch (err) {
         console.error("Error creating checkout session:", err);
         setError("Failed to initialize payment.");
