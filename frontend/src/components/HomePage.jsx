@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../style/homepage.css";
 import { FaSearch } from "react-icons/fa";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import BookingModal from "./Cinema-booking/BookingModal";
 
@@ -19,7 +19,6 @@ import captain from "../assets/movies/captain.jpg";
 import hangover from "../assets/movies/hangover.jpg";
 
 const HomePage = () => {
-  const navigate = useNavigate();
 
   const [showLocations, setShowLocations] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -104,13 +103,6 @@ const HomePage = () => {
           ))}
         </div>
 
-        {/* HIDDEN ADMIN LOGIN (NOT SHOWN TO USERS)
-        <div
-          style={{ textAlign: "center", marginTop: "20px", opacity: 0.3 }}
-          onClick={() => navigate("/admin/login")}
-        >
-          Admin Access
-        </div> */}
       </div>
 
       {showModal && (
