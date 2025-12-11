@@ -46,4 +46,3 @@ export default function AddShowModal({ onClose, onSubmit }) {
     </div>
   );
 }
-6
