@@ -1,26 +1,28 @@
 const pool = require("../db");
 
 // ===============================
-// GET ALL SHOWS (FIXED FOR YOUR DB STRUCTURE)
+// GET ALL SHOWS (CORRECT + WORKING)
 // ===============================
 const getAllShows = async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT 
-        id,
-        name AS movie_title,
-        movie_id,
-        location,
-        date,
-        time,
-        screen,
-        adult_price,
-        child_price
-      FROM showtimes
-      ORDER BY date ASC, time ASC;
+        s.id,
+        m.title AS movie_title,
+        s.movie_id,
+        s.location,
+        s.date,
+        s.time,
+        s.screen,
+        s.adult_price,
+        s.child_price,
+        s.seats
+      FROM showtimes s
+      JOIN movies m ON s.movie_id = m.id
+      ORDER BY s.date ASC, s.time ASC;
     `);
 
-    res.json(result.rows);
+    res.json(result.rows);  // MUST return array
   } catch (err) {
     console.error("Error fetching shows:", err);
     res.status(500).json({ message: "Failed to fetch shows" });
@@ -36,12 +38,12 @@ const addShow = async (req, res) => {
   try {
     const query = `
       INSERT INTO showtimes 
-      (movie_id, name, location, date, time, screen, adult_price, child_price)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      (movie_id, location, date, time, screen, adult_price, child_price, seats)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, 100)
       RETURNING *;
     `;
 
-    const values = [movieId, "", location, date, time, screen, adultPrice, childPrice];
+    const values = [movieId, location, date, time, screen, adultPrice, childPrice];
     const result = await pool.query(query, values);
 
     res.status(201).json({
