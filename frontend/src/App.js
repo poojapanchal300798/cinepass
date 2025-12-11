@@ -66,7 +66,7 @@ function App() {
 
         <Route path="/success" element={<SuccessView />} />
       </Routes>
-      <Footer />
+      {!window.location.pathname.includes("admin") && <Footer />}
       </div>
     </Router>
   );

@@ -104,13 +104,13 @@ const HomePage = () => {
           ))}
         </div>
 
-        {/* HIDDEN ADMIN LOGIN (NOT SHOWN TO USERS) */}
+        {/* HIDDEN ADMIN LOGIN (NOT SHOWN TO USERS)
         <div
           style={{ textAlign: "center", marginTop: "20px", opacity: 0.3 }}
           onClick={() => navigate("/admin/login")}
         >
           Admin Access
-        </div>
+        </div> */}
       </div>
 
       {showModal && (

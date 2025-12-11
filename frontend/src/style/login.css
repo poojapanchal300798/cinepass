@@ -2,7 +2,6 @@
    BACKGROUND
 ======================================= */
 .page-background {
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,7 +13,7 @@
    LOGIN CARD
 ======================================= */
 .login-card {
-  width: 420px;
+  width: 100%;
   background: rgba(0, 20, 35, 0.55);
   padding: 48px 40px;
   border-radius: 26px;
@@ -167,7 +166,7 @@
    LOGIN BUTTON
 ======================================= */
 .login-btn {
-  width: 100%;
+  width: fit-content !important;
   padding: 16px;
   margin-top: 25px;
   background: linear-gradient(135deg, #89d9ff, #c3f1ff);
