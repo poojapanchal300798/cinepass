@@ -1,9 +1,18 @@
+import "../../style/manageShows.css";
+
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import ShowTable from "./Showtable";
 import AddShowModal from "./AddShowModal";
 import EditShowModal from "./EditShowModal";
 
+import "../../style/manageShows.css"; 
+import logo from "../../assets/north-star-logo.jpg";
+
 export default function ManageShows() {
+  const navigate = useNavigate();
+
   const [shows, setShows] = useState([]);
   const [search, setSearch] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -18,7 +27,11 @@ export default function ManageShows() {
       const res = await fetch("http://localhost:5000/api/shows");
       const data = await res.json();
 
-      // ⭐ MAP API RESPONSE → UI format
+      if (!Array.isArray(data)) {
+        console.error("Expected array, got:", data);
+        return;
+      }
+
       const mapped = data.map((s) => ({
         id: s.id,
         name: s.movie_title,
@@ -35,28 +48,9 @@ export default function ManageShows() {
     }
   };
 
-  const handleAddShow = async (newShow) => {
-    await fetch("http://localhost:5000/api/shows", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newShow),
-    });
-
-    fetchShows();
-    setIsAddModalOpen(false);
-  };
-
-  const handleUpdateShow = async (updated) => {
-    await fetch(`http://localhost:5000/api/shows/${updated.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updated),
-    });
-
-    fetchShows();
-  };
-
   const handleDeleteShow = async (id) => {
+    if (!window.confirm("Delete this show?")) return;
+
     await fetch(`http://localhost:5000/api/shows/${id}`, {
       method: "DELETE",
     });
@@ -65,47 +59,66 @@ export default function ManageShows() {
   };
 
   return (
-    <div className="p-6 text-white">
-      <h1 className="text-3xl font-bold mb-6">Manage Shows</h1>
+    <div className="manage-page">
 
-      <div className="flex justify-between items-center mb-4">
+      {/* HEADER */}
+      <div className="admin-header">
+        <div className="header-left">
+          <img src={logo} className="logo-img" alt="logo" />
+          <div>
+            <h2 className="header-title">NORTH STAR</h2>
+            <span className="header-sub">ADMIN PORTAL</span>
+          </div>
+        </div>
+
+        <button className="logout-btn" onClick={() => navigate("/")}>
+          Logout
+        </button>
+      </div>
+
+      {/* NAV BAR */}
+      <div className="admin-tabs">
+        <button onClick={() => navigate("/admin/dashboard")}>Overview</button>
+        <button className="active">Shows</button>
+        <button>Staff</button>
+        <button>Revenue</button>
+      </div>
+
+      {/* TITLE */}
+      <h1 className="manage-title">Manage Shows</h1>
+
+      {/* SEARCH + ADD */}
+      <div className="manage-toolbar">
         <input
           type="text"
           placeholder="Search shows..."
-          className="bg-[#0f2b3a] p-3 rounded-lg w-80 border border-[#24566d]"
+          className="manage-search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <button
-          onClick={() => setIsAddModalOpen(true)}
-          className="bg-sky-500 hover:bg-sky-600 px-4 py-2 rounded-lg"
-        >
+        <button className="btn-add-show" onClick={() => setIsAddModalOpen(true)}>
           + Add Show
         </button>
       </div>
 
-      <ShowTable
-        shows={shows.filter((s) =>
-          s.name.toLowerCase().includes(search.toLowerCase())
-        )}
-        onEdit={(s) => setEditShow(s)}
-        onDelete={handleDeleteShow}
-      />
+      {/* TABLE */}
+      <div className="show-table-container">
+        <ShowTable
+          shows={shows.filter((s) =>
+            s.name.toLowerCase().includes(search.toLowerCase())
+          )}
+          onEdit={setEditShow}
+          onDelete={handleDeleteShow}
+        />
+      </div>
 
       {isAddModalOpen && (
-        <AddShowModal
-          onClose={() => setIsAddModalOpen(false)}
-          onSubmit={handleAddShow}
-        />
+        <AddShowModal onClose={() => setIsAddModalOpen(false)} onSuccess={fetchShows} />
       )}
 
       {editShow && (
-        <EditShowModal
-          show={editShow}
-          onClose={() => setEditShow(null)}
-          onSubmit={handleUpdateShow}
-        />
+        <EditShowModal show={editShow} onClose={() => setEditShow(null)} onSuccess={fetchShows} />
       )}
     </div>
   );

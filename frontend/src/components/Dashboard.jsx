@@ -1,51 +1,12 @@
 import React from "react";
-import "../style/dashboard.css";
-import logo from "../assets/north-star-logo.jpg";
-import { useNavigate } from "react-router-dom";
+import AdminLayout from "./AdminLayout/AdminLayout";
+import "../style/dashboard.css";  
+
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-
   return (
-    <div className="dashboard-page">
+    <AdminLayout active="overview">
 
-      {/* ====== HEADER ====== */}
-      <header className="topbar">
-        <div className="topbar-left">
-          <img src={logo} alt="Logo" className="logo-img" />
-          <div className="logo-text">
-            <h2>NORTH STAR</h2>
-            <span>ADMIN PORTAL</span>
-          </div>
-        </div>
-
-        {/* LOGOUT BUTTON */}
-        <button
-          className="logout-btn"
-          onClick={() => navigate("/")}
-        >
-          Logout
-        </button>
-      </header>
-
-      {/* ====== NAVIGATION TABS ====== */}
-     <div className="nav-tabs">
-  <button className="tab active">Overview</button>
-
-  <button
-    className="tab"
-    onClick={() => navigate("/admin/shows")}
-  >
-    Manage Shows
-  </button>
-
-  <button className="tab">Staff Accounts</button>
-  <button className="tab">Manage Bookings</button>
-  <button className="tab">Revenue</button>
-</div>
-
-
-      {/* ====== DASHBOARD TITLE ====== */}
       <h1 className="dashboard-title">Dashboard Overview</h1>
 
       {/* ====== MAIN CARDS ====== */}
@@ -99,7 +60,7 @@ const Dashboard = () => {
 
       </div>
 
-    </div>
+    </AdminLayout>
   );
 };
 

@@ -1,0 +1,115 @@
+.manage-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 30px;
+  background: linear-gradient(to bottom, #001623, #003147, #002737);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* HEADER */
+.admin-header {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-img {
+  width: 55px;
+  border-radius: 8px;
+}
+
+.header-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.header-sub {
+  font-size: 11px;
+  color: #7ccfff;
+}
+
+.logout-btn {
+  padding: 10px 22px;
+  background: #204253;
+  border-radius: 10px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* NAVIGATION TABS */
+.admin-tabs {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.admin-tabs button {
+  background: #1c3a49;
+  color: white;
+  padding: 10px 22px;
+  border-radius: 10px;
+  border: none;
+}
+
+.admin-tabs .active {
+  background: #4db5ff;
+  color: #002b3a;
+  font-weight: 600;
+}
+
+/* TITLE */
+.manage-title {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  width: 80%;
+}
+
+/* SEARCH + ADD */
+.manage-toolbar {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.manage-search {
+  width: 300px;
+  padding: 12px;
+  background: #0b2431;
+  border: 1px solid #1e4152;
+  border-radius: 10px;
+  color: white;
+}
+
+.btn-add-show {
+  background: #6cc8ff;
+  color: #002b3a;
+  padding: 12px 22px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+}
+
+/* TABLE */
+.show-table-container {
+  width: 80%;
+  background: #06202e;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid #1e4152;
+}
+

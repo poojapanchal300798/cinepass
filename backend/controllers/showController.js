@@ -1,27 +1,23 @@
 const pool = require("../db");
 
 // ===============================
-// GET ALL SHOWS
+// GET ALL SHOWS (FIXED FOR YOUR DB STRUCTURE)
 // ===============================
 const getAllShows = async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT 
-        s.id,
-        s.movie_id,
-        m.title AS movie_title,
-        m.image_url AS movie_image,
-        s.location_id,
-        l.name AS location_name,
-        s.date,
-        s.time,
-        s.screen,
-        s.adult_price,
-        s.child_price
-      FROM showtimes s
-      JOIN movies m ON s.movie_id = m.id
-      JOIN locations l ON s.location_id = l.id
-      ORDER BY s.date ASC, s.time ASC;
+        id,
+        name AS movie_title,
+        movie_id,
+        location,
+        date,
+        time,
+        screen,
+        adult_price,
+        child_price
+      FROM showtimes
+      ORDER BY date ASC, time ASC;
     `);
 
     res.json(result.rows);
@@ -35,17 +31,17 @@ const getAllShows = async (req, res) => {
 // ADD NEW SHOW
 // ===============================
 const addShow = async (req, res) => {
-  const { movieId, locationId, date, time, screen, adultPrice, childPrice } = req.body;
+  const { movieId, location, date, time, screen, adultPrice, childPrice } = req.body;
 
   try {
     const query = `
       INSERT INTO showtimes 
-      (movie_id, location_id, date, time, screen, adult_price, child_price)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      (movie_id, name, location, date, time, screen, adult_price, child_price)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *;
     `;
 
-    const values = [movieId, locationId, date, time, screen, adultPrice, childPrice];
+    const values = [movieId, "", location, date, time, screen, adultPrice, childPrice];
     const result = await pool.query(query, values);
 
     res.status(201).json({
@@ -64,13 +60,13 @@ const addShow = async (req, res) => {
 // ===============================
 const updateShow = async (req, res) => {
   const { id } = req.params;
-  const { movieId, locationId, date, time, screen, adultPrice, childPrice } = req.body;
+  const { movieId, location, date, time, screen, adultPrice, childPrice } = req.body;
 
   try {
     const query = `
       UPDATE showtimes
       SET movie_id = $1,
-          location_id = $2,
+          location = $2,
           date = $3,
           time = $4,
           screen = $5,
@@ -80,16 +76,7 @@ const updateShow = async (req, res) => {
       RETURNING *;
     `;
 
-    const values = [
-      movieId,
-      locationId,
-      date,
-      time,
-      screen,
-      adultPrice,
-      childPrice,
-      id,
-    ];
+    const values = [movieId, location, date, time, screen, adultPrice, childPrice, id];
 
     const result = await pool.query(query, values);
 
