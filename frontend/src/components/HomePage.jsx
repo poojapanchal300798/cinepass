@@ -105,6 +105,7 @@ const HomePage = () => {
             </div>
           ))}
         </div>
+
       </div>
 
       {/* BOOKING MODAL */}
