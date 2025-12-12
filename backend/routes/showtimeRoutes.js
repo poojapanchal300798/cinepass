@@ -6,18 +6,18 @@ const {
   addShowtime,
   updateShowtime,
   deleteShowtime
-} = require("../controllers/showController");
+} = require("../controllers/showtimeController");
 
 // GET all showtimes
 router.get("/", getAllShowtimes);
 
-// ADD a showtime
+// ADD new showtime
 router.post("/", addShowtime);
 
-// UPDATE a showtime
+// UPDATE showtime
 router.put("/:id", updateShowtime);
 
-// DELETE a showtime
+// DELETE showtime
 router.delete("/:id", deleteShowtime);
 
 module.exports = router;

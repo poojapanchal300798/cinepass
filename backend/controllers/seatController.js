@@ -1,4 +1,4 @@
-const db = require('../config/database');
+const pool = require('../db');
 
 exports.getSeatsForShowtime = async (req, res) => {
     try {

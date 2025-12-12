@@ -31,7 +31,6 @@ const addShowtime = async (req, res) => {
   const { movieId, movieTitle, location, auditorium, showDatetime } = req.body;
 
   try {
-    // Prevent duplicate showtime in SAME AUDITORIUM & TIME
     const conflict = await pool.query(
       `
         SELECT id FROM showtimes 
@@ -64,6 +63,7 @@ const addShowtime = async (req, res) => {
       message: "Showtime added successfully",
       show: result.rows[0],
     });
+
   } catch (err) {
     console.error("Error adding showtime:", err);
     res.status(500).json({ message: "Failed to add showtime" });
@@ -122,39 +122,9 @@ const deleteShowtime = async (req, res) => {
   }
 };
 
-// ============================================
-// LOOKUP SHOWTIMES (Movie + Location + Auditorium)
-// ============================================
-const getShowtimesForSelection = async (req, res) => {
-  try {
-    const { movieId, location, auditorium } = req.params;
-
-    const result = await pool.query(
-      `
-      SELECT id, show_datetime
-      FROM showtimes
-      WHERE movie_id = $1
-      AND location = $2
-      AND auditorium = $3
-      ORDER BY show_datetime ASC
-      `,
-      [movieId, location, auditorium]
-    );
-
-    res.json({
-      success: true,
-      showtimes: result.rows
-    });
-  } catch (err) {
-    console.error("Error fetching filtered showtimes:", err);
-    res.status(500).json({ message: "Failed to fetch showtimes" });
-  }
-};
-
 module.exports = {
   getAllShowtimes,
   addShowtime,
   updateShowtime,
-  deleteShowtime,
-  getShowtimesForSelection
+  deleteShowtime
 };
