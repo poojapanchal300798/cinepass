@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import "../style/homepage.css";
 import { FaSearch } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import BookingModal from "./Cinema-booking/BookingModal";
 
 // LOGO
 import logo from "../assets/north-star-logo.jpg";
 
-// MOVIE IMAGES
+// MOVIE POSTERS
 import spider from "../assets/movies/spider.jpg";
 import xxx from "../assets/movies/xxx.jpg";
 import doraemon from "../assets/movies/doraemon.jpg";
@@ -19,6 +19,8 @@ import captain from "../assets/movies/captain.jpg";
 import hangover from "../assets/movies/hangover.jpg";
 
 const HomePage = () => {
+  const navigate = useNavigate();
+
   const [showLocations, setShowLocations] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -46,10 +48,10 @@ const HomePage = () => {
           <FaSearch className="header-icon" />
         </div>
 
-        {/* NAVIGATION BAR */}
+        {/* NAVIGATION */}
         <div className="top-nav-bar">
           <button className="top-nav-btn">Movies</button>
-
+            
           <div className="location-container">
             <button
               className="top-nav-btn"
@@ -57,13 +59,10 @@ const HomePage = () => {
             >
               Locations ▾
             </button>
-
             {showLocations && (
               <div className="location-dropdown">
                 {locations.map((loc) => (
-                  <div key={loc} className="location-item">
-                    {loc}
-                  </div>
+                  <div key={loc} className="location-item">{loc}</div>
                 ))}
               </div>
             )}
@@ -87,7 +86,6 @@ const HomePage = () => {
           </div>
         </div>
 
-        {/* MOVIE GRID */}
         <h3 className="section-title">Now in the cinema</h3>
 
         <div className="movie-grid">
@@ -106,15 +104,17 @@ const HomePage = () => {
           ))}
         </div>
 
+        {/* HIDDEN ADMIN LOGIN (NOT SHOWN TO USERS) */}
+        <div
+          style={{ textAlign: "center", marginTop: "20px", opacity: 0.3 }}
+          onClick={() => navigate("/admin/login")}
+        >
+          Admin Access
+        </div>
       </div>
 
-      {/* BOOKING MODAL */}
       {showModal && (
-        <BookingModal
-          parent="homepage"
-          movieList={movies}
-          onClose={() => setShowModal(false)}
-        />
+        <BookingModal parent='homepage' movieList={movies} onClose={() => setShowModal(false)} />
       )}
     </div>
   );

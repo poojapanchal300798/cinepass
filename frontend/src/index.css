@@ -149,6 +149,7 @@ body {
 
 /* Footer */
 footer {
+    margin-top: 25px;
     color: #8bb2c4;
     font-size: 11px;
 }

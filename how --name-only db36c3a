@@ -1,0 +1,98 @@
+[33md32c22f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/clean[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mclean[m[33m)[m update commit message for your changes. Lines starting
+[33m3270af2[m seat pollin update
+[33mdb36c3a[m stripe commit message
+[33m75d65f8[m update commit message in .git/COMMIT_EDITMSG
+[33m109fa4f[m commit
+[33m1346bd4[m Remove secret .env file from repo
+[33m992b5ee[m changes
+[33m360f437[m Merge branch 'main' of https://github.com/poojapanchal300798/cinepass
+[33meaa6c9e[m change
+[33m01937a5[m Update HomePage.jsx
+[33m78e7e54[m style fix
+[33meb8fc0e[m resolve error
+[33m2cc4791[m admin panel change
+[33m4869a16[m Resolve .env merge conflict
+[33me10c83c[m updated files
+[33m13a2abd[m Update BookingModal.js
+[33m68f6d50[m Update CheckoutView.js
+[33md3a003b[m Update MovieDetails.js
+[33m8d9ad91[m payment integration
+[33mef4f2fc[m frontend change
+[33maf6fe0e[m server changes cred.
+[33m99b5a8b[m old to new
+[33mf011efa[m server error check
+[33m29fe539[m manage show working
+[33m5b060e1[m admin and user page seperated
+[33m075e2c7[m resolve the error
+[33mb864ca7[m buytickets button uodated
+[33ma0a4e1c[m show.js change
+[33mbfd8073[m resolve server
+[33m94b3bd0[m server change
+[33md4af976[m commit
+[33m7a0bc20[m eorror message
+[33mde9494a[m error change
+[33m198560b[m yml change for API URL
+[33mf5a01db[m sakib
+[33m73f787f[m sakib
+[33mceab792[m yml change add azure login step
+[33m4806e49[m yml changes
+[33me764275[m path changed
+[33mc708ec1[m azure deplyment file change backewnd make in main root# Please enter the commit message for your changes. Lines starting
+[33mc02db14[m backend root updated
+[33m8875882[m azure postgres database connection details
+[33m490e4d5[m second yml change
+[33md53f84b[m main yml chang
+[33m15c97ba[m Add or update the Azure App Service build and deployment workflow config
+[33m6384948[m home page location search features added
+[33m393df12[m connect themanage shiw with dashboard and add admin login roite
+[33m3a24d82[m admin uppage on home page
+[33m2b9f22d[m Restore my UI files after reset
+[33m16ff99e[m[33m ([m[1;31morigin/my-files[m[33m)[m update shows
+[33m436d22b[m Updated project after copying local files to cloned repo
+[33m745630b[m Updated dashboard UI and fixed logout button
+[33m6638968[m Create main.tsx
+[33ma7ecba0[m changes in login
+[33me962aec[m changes
+[33m9ff445b[m Refactor Azure deployment workflow for clarity
+[33me96ee09[m Add debugging step to print working directory
+[33m4bec208[m Fix formatting issues in Azure deployment workflow
+[33m77ea6b1[m Modify Azure deployment workflow for frontend directory
+[33m99c1a2d[m Change deployment workflow to React app
+[33mebf7f91[m commit to azure for cehcking
+[33me975403[m Merge branch 'main' of https://github.com/MickyOulu/CinePass-webProject
+[33m34d00a4[m resolved conflicts
+[33m170c94b[m forntend and backend changes
+[33mc7e07a5[m Initial commit
+[33m925779e[m Update .env files for frontend and backend, and other configuration changes
+[33mf3e9040[m Update frontend .env, backend .env, and deployment files
+[33mbf22dcf[m fetch change
+[33m172681b[m made changes in frontend
+[33m13ef88b[m trying fetch
+[33mc72b302[m fetch link
+[33mbcace32[m trying backend and frontend for login with database
+[33m23bb7e1[m azure deployment for backend
+[33me8f17d7[m changed
+[33m1fdd4fd[m Merge branch 'main' of https://github.com/MickyOulu/CinePass-webProject
+[33m6043c10[m changes in env file DB_User name
+[33m31aace0[m Update main_cinepass.yml
+[33m70909ab[m Update main_cinepass.yml
+[33mbe21a04[m Refactor Azure deployment workflow for cinepass
+[33m104c95f[m Prepare backend for Azure PostgreSQL connection
+[33m9915ad6[m Merge branch 'main' of https://github.com/MickyOulu/CinePass-webProject
+[33m28a2299[m changed db.js file added ssl for deployment
+[33ma892a82[m Update main_cinepass.yml
+[33m69c5d44[m Fix formatting issues in Azure workflow YAML
+[33mb43c5eb[m Modify GitHub Actions workflow for backend directory
+[33m3f4ef56[m backend modified
+[33m2f2cd9f[m added frontend and connected db
+[33m6c1e570[m created .env file in the backend
+[33m9512361[m changes made to the priject structure
+[33m9c3908f[m back to previous structure
+[33m77b0217[m Create .info
+[33ma6011a9[m formatted project structure
+[33m1a726d9[m[33m ([m[1;31morigin/sakib[m[33m)[m Update README.md
+[33ma7246b4[m changed server.js to index.js in package.json scripts
+[33mc88fdcb[m Rename server.js to index.js, add greetings endpoint
+[33mab51c69[m Initial Hello World commit
+[33ma2356c8[m Add or update the Azure App Service build and deployment workflow config
+[33ma2d3172[m Initial commit

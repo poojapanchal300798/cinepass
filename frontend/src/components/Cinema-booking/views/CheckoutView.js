@@ -36,7 +36,7 @@ function CheckoutView({totalAmount}) {
         console.error('Error creating checkout session:', error);
         throw error;
       });
-  }, [totalAmount]);
+  }, []);
 
   return (
     <CheckoutProvider stripe={stripePromise} options={{clientSecret: promise}}>
