@@ -56,6 +56,6 @@ router.get("/status/:showId", async (req, res) => {
     console.error("❌ Seat status fetch error:", err);
     res.status(500).json([]);
   }
-});
+});6
 
 module.exports = router;
