@@ -8,11 +8,7 @@ const Login = () => {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  // Load backend URL safely
-  const API_URL =
-    process.env.REACT_APP_BACKEND_URL ||
-    "http://localhost:5000"; // fallback for local testing
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -20,24 +16,30 @@ const Login = () => {
       return;
     }
 
+    setLoading(true);
+
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
+      const response = await fetch("/api/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ username, password }),
       });
 
       const data = await response.json();
 
-      if (data.success) {
+      if (response.ok && data.success) {
         localStorage.setItem("adminToken", data.token);
         navigate("/admin/dashboard");
       } else {
-        alert(data.message);
+        alert(data.message || "Invalid credentials");
       }
     } catch (error) {
       console.error("Login Error:", error);
-      alert("Server error — backend not responding");
+      alert("Server error — please try again later");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,7 +66,9 @@ const Login = () => {
         </div>
 
         <h2 className="main-title">Admin Portal</h2>
-        <p className="subtitle">Secure access to North Star Booking management</p>
+        <p className="subtitle">
+          Secure access to North Star Booking management
+        </p>
 
         {/* Username */}
         <div className="input-group">
@@ -72,7 +76,6 @@ const Login = () => {
           <div className="input-wrapper">
             <span className="input-icon">📧</span>
             <input
-              id="username"
               type="text"
               placeholder="Enter your email or username"
               value={username}
@@ -87,7 +90,6 @@ const Login = () => {
           <div className="input-wrapper">
             <span className="input-icon">🔒</span>
             <input
-              id="password"
               type="password"
               placeholder="Enter your password"
               value={password}
@@ -100,8 +102,12 @@ const Login = () => {
         <div className="forgot-text">Forgot password?</div>
 
         {/* Login Button */}
-        <button className="login-btn" onClick={handleLogin}>
-          Login to Dashboard
+        <button
+          className="login-btn"
+          onClick={handleLogin}
+          disabled={loading}
+        >
+          {loading ? "Logging in..." : "Login to Dashboard"}
         </button>
 
         {/* Demo Credentials */}
