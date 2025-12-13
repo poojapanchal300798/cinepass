@@ -1,7 +1,7 @@
-import {CheckoutProvider} from '@stripe/react-stripe-js/checkout';
-import {loadStripe} from '@stripe/stripe-js';
-import React, {useEffect, useState} from 'react';
-import CheckoutForm from '../CheckoutForm';
+import { CheckoutProvider } from "@stripe/react-stripe-js/checkout";
+import { loadStripe } from "@stripe/stripe-js";
+import React, { useEffect, useState } from "react";
+import CheckoutForm from "../CheckoutForm";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
@@ -12,14 +12,11 @@ function CheckoutView({ totalAmount }) {
   useEffect(() => {
     async function createSession() {
       try {
-        const res = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/create-checkout-session`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ price: totalAmount }),
-          }
-        );
+        const res = await fetch("/api/create-checkout-session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ price: totalAmount }),
+        });
 
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -27,8 +24,8 @@ function CheckoutView({ totalAmount }) {
 
         const data = await res.json();
 
-        if (data?.client_secret) {
-          setClientSecret(data.client_secret);
+        if (data?.clientSecret) {
+          setClientSecret(data.clientSecret);
         } else {
           throw new Error("Missing client secret");
         }
