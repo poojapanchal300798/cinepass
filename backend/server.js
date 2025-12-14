@@ -52,7 +52,7 @@ app.use("/api/showtimes", showtimeRoutes);
 app.use("/api/seats", seatRoutes);
 
 // =========================
-// STRIPE — CREATE CHECKOUT SESSION (EMBEDDED) ✅ FIXED
+// STRIPE — CREATE CHECKOUT SESSION (EMBEDDED)
 // =========================
 app.post("/api/create-checkout-session", async (req, res) => {
   try {
@@ -63,7 +63,7 @@ app.post("/api/create-checkout-session", async (req, res) => {
     }
 
     const session = await stripe.checkout.sessions.create({
-      ui_mode: "embedded", // 🔑 REQUIRED FOR EMBEDDED CHECKOUT
+      ui_mode: "embedded",
       mode: "payment",
 
       line_items: [
@@ -79,8 +79,10 @@ app.post("/api/create-checkout-session", async (req, res) => {
         }
       ],
 
-      return_url:
-        "http://localhost:3001/success?session_id={CHECKOUT_SESSION_ID}"
+      // ✅ FIX 1: Azure-safe return URL
+      return_url: `${
+        process.env.FRONTEND_URL || "http://localhost:3001"
+      }/success?session_id={CHECKOUT_SESSION_ID}`
     });
 
     res.json({ clientSecret: session.client_secret });
@@ -91,7 +93,7 @@ app.post("/api/create-checkout-session", async (req, res) => {
 });
 
 // =========================
-// STRIPE — SESSION STATUS (UNCHANGED)
+// STRIPE — SESSION STATUS
 // =========================
 app.get("/api/session-status", async (req, res) => {
   try {
@@ -129,8 +131,8 @@ setInterval(async () => {
 // SERVE FRONTEND (LOCAL + AZURE)
 // =========================
 const frontendPath = process.env.WEBSITE_SITE_NAME
-  ? "/home/site/wwwroot/frontend/build"
-  : path.join(__dirname, "frontend", "build");
+  ? "/home/site/wwwroot/frontend/dist" // ✅ FIX 2: Vite uses dist
+  : path.join(__dirname, "frontend", "dist");
 
 app.use(express.static(frontendPath));
 
