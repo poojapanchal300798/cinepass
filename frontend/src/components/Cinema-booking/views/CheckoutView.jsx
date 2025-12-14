@@ -1,27 +1,23 @@
-import { CheckoutProvider } from "@stripe/react-stripe-js/checkout";
+import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import React, { useEffect, useState } from "react";
-import CheckoutForm from "../CheckoutForm";
 
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+const stripePromise = loadStripe(
+  import.meta.env.VITE_STRIPE_PUBLIC_KEY
+);
 
 function CheckoutView({ totalAmount }) {
   const [clientSecret, setClientSecret] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!totalAmount || totalAmount <= 0) return;
-
     async function createSession() {
       try {
-        const res = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/create-checkout-session`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ price: totalAmount }),
-          }
-        );
+        const res = await fetch("/api/create-checkout-session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ price: totalAmount }),
+        });
 
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -29,11 +25,11 @@ function CheckoutView({ totalAmount }) {
 
         const data = await res.json();
 
-        if (!data.client_secret) {
+        if (data?.clientSecret) {
+          setClientSecret(data.clientSecret);
+        } else {
           throw new Error("Missing client secret");
         }
-
-        setClientSecret(data.client_secret);
       } catch (err) {
         console.error("Error creating checkout session:", err);
         setError("Failed to initialize payment.");
@@ -47,9 +43,12 @@ function CheckoutView({ totalAmount }) {
   if (!clientSecret) return <p>Loading payment…</p>;
 
   return (
-    <CheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
-      <CheckoutForm />
-    </CheckoutProvider>
+    <EmbeddedCheckoutProvider
+      stripe={stripePromise}
+      options={{ clientSecret }}
+    >
+      <EmbeddedCheckout />
+    </EmbeddedCheckoutProvider>
   );
 }
 

@@ -16,6 +16,13 @@ const seatRoutes = require("./routes/seatRoutes");
 // =========================
 // STRIPE
 // =========================
+console.log(
+  "STRIPE_SECRET_KEY loaded:",
+  process.env.STRIPE_SECRET_KEY
+    ? process.env.STRIPE_SECRET_KEY.slice(0, 12) + "..."
+    : "UNDEFINED"
+);
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
@@ -26,7 +33,8 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:3000",
+      "http://localhost:3001", 
+      "http://localhost:3000", // CRA (kept)
       process.env.FRONTEND_URL
     ].filter(Boolean),
     credentials: true
@@ -44,8 +52,7 @@ app.use("/api/showtimes", showtimeRoutes);
 app.use("/api/seats", seatRoutes);
 
 // =========================
-// STRIPE — CREATE SESSION
-// =========================
+// STRIPE — CREATE PAYMENT INTENT (FOR STRIPE ELEMENTS)
 app.post("/api/create-checkout-session", async (req, res) => {
   try {
     const { price } = req.body;
@@ -54,28 +61,21 @@ app.post("/api/create-checkout-session", async (req, res) => {
       return res.status(400).json({ error: "Invalid price value" });
     }
 
-    const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      ui_mode: "embedded",
-      line_items: [
-        {
-          price_data: {
-            currency: "EUR",
-            product_data: { name: "Movie Ticket" },
-            unit_amount: price * 100
-          },
-          quantity: 1
-        }
-      ],
-      return_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: price * 100,
+      currency: "eur",
+      automatic_payment_methods: {
+        enabled: true
+      }
     });
 
-    res.json({ clientSecret: session.client_secret });
+    res.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
     console.error("Stripe error:", error.message);
-    res.status(500).json({ error: "Stripe session creation failed" });
+    res.status(500).json({ error: "Payment intent creation failed" });
   }
 });
+
 
 // =========================
 // STRIPE — SESSION STATUS

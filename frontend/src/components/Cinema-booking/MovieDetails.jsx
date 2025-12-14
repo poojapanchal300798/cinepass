@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaClock, FaStar, FaShareAlt, FaUser, FaCalendarAlt } from "react-icons/fa"; 
 import "../../style/CinemaBooking.css"; // Ensure this CSS path is correct for detail styles
-import BookingModal from "../Cinema-booking/BookingModal";
+import BookingModal from "./BookingModal";
 // MOVIE POSTERS
 import spider from "../../assets/movies/spider.jpg";
 import xxx from "../../assets/movies/xxx.jpg";
