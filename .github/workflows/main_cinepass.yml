@@ -19,19 +19,19 @@ jobs:
         with:
           node-version: '20.x'
 
-      # Build frontend
+      # Build frontend (Vite)
       - name: Build frontend
         working-directory: ./frontend
         run: |
           npm install
           npm run build
 
-      # Move frontend build into backend
+      # ✅ FIX: Move Vite dist instead of build
       - name: Move frontend build
         run: |
           rm -rf backend/frontend
           mkdir -p backend/frontend
-          mv frontend/build backend/frontend/
+          mv frontend/dist backend/frontend/
 
       # Install backend dependencies
       - name: Install backend dependencies
@@ -50,7 +50,6 @@ jobs:
         with:
           name: deploy-zip
           path: deploy.zip
-
 
   deploy:
     runs-on: ubuntu-latest
