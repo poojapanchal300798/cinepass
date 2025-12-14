@@ -33,8 +33,8 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:3001", 
-      "http://localhost:3000", // CRA (kept)
+      "http://localhost:3001",
+      "http://localhost:3000",
       process.env.FRONTEND_URL
     ].filter(Boolean),
     credentials: true
@@ -52,7 +52,8 @@ app.use("/api/showtimes", showtimeRoutes);
 app.use("/api/seats", seatRoutes);
 
 // =========================
-// STRIPE — CREATE PAYMENT INTENT (FOR STRIPE ELEMENTS)
+// STRIPE — CREATE CHECKOUT SESSION (EMBEDDED) ✅ FIXED
+// =========================
 app.post("/api/create-checkout-session", async (req, res) => {
   try {
     const { price } = req.body;
@@ -61,24 +62,36 @@ app.post("/api/create-checkout-session", async (req, res) => {
       return res.status(400).json({ error: "Invalid price value" });
     }
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: price * 100,
-      currency: "eur",
-      automatic_payment_methods: {
-        enabled: true
-      }
+    const session = await stripe.checkout.sessions.create({
+      ui_mode: "embedded", // 🔑 REQUIRED FOR EMBEDDED CHECKOUT
+      mode: "payment",
+
+      line_items: [
+        {
+          price_data: {
+            currency: "eur",
+            product_data: {
+              name: "Cinema Ticket"
+            },
+            unit_amount: Math.round(price * 100)
+          },
+          quantity: 1
+        }
+      ],
+
+      return_url:
+        "http://localhost:3001/success?session_id={CHECKOUT_SESSION_ID}"
     });
 
-    res.json({ clientSecret: paymentIntent.client_secret });
+    res.json({ clientSecret: session.client_secret });
   } catch (error) {
-    console.error("Stripe error:", error.message);
-    res.status(500).json({ error: "Payment intent creation failed" });
+    console.error("Stripe embedded checkout error:", error);
+    res.status(500).json({ error: "Checkout session creation failed" });
   }
 });
 
-
 // =========================
-// STRIPE — SESSION STATUS
+// STRIPE — SESSION STATUS (UNCHANGED)
 // =========================
 app.get("/api/session-status", async (req, res) => {
   try {

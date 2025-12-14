@@ -1,6 +1,9 @@
-import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
+import {
+  EmbeddedCheckoutProvider,
+  EmbeddedCheckout
+} from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const stripePromise = loadStripe(
   import.meta.env.VITE_STRIPE_PUBLIC_KEY
@@ -9,8 +12,12 @@ const stripePromise = loadStripe(
 function CheckoutView({ totalAmount }) {
   const [clientSecret, setClientSecret] = useState(null);
   const [error, setError] = useState(null);
+  const initializedRef = useRef(false);
 
   useEffect(() => {
+    if (initializedRef.current) return;
+    initializedRef.current = true;
+
     async function createSession() {
       try {
         const res = await fetch("/api/create-checkout-session", {
@@ -25,11 +32,11 @@ function CheckoutView({ totalAmount }) {
 
         const data = await res.json();
 
-        if (data?.clientSecret) {
-          setClientSecret(data.clientSecret);
-        } else {
+        if (!data?.clientSecret) {
           throw new Error("Missing client secret");
         }
+
+        setClientSecret(data.clientSecret);
       } catch (err) {
         console.error("Error creating checkout session:", err);
         setError("Failed to initialize payment.");
