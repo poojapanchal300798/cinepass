@@ -32,14 +32,22 @@ const app = express();
 // =========================
 app.use(
   cors({
-    origin: [
-      "http://localhost:3001",
-      "http://localhost:3000",
-      process.env.FRONTEND_URL
-    ].filter(Boolean),
+    origin: (origin, callback) => {
+      if (
+        !origin ||
+        origin.includes("localhost") ||
+        origin.includes("azurewebsites.net")
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true
   })
 );
+
+
 
 app.use(express.json());
 
@@ -62,26 +70,27 @@ app.post("/api/create-checkout-session", async (req, res) => {
       return res.status(400).json({ error: "Invalid price value" });
     }
 
-    const session = await stripe.checkout.sessions.create({
-      ui_mode: "embedded", // 🔑 REQUIRED FOR EMBEDDED CHECKOUT
-      mode: "payment",
+  const session = await stripe.checkout.sessions.create({
+  ui_mode: "embedded",
+  mode: "payment",
 
-      line_items: [
-        {
-          price_data: {
-            currency: "eur",
-            product_data: {
-              name: "Cinema Ticket"
-            },
-            unit_amount: Math.round(price * 100)
-          },
-          quantity: 1
-        }
-      ],
+  line_items: [
+    {
+      price_data: {
+        currency: "eur",
+        product_data: {
+          name: "Cinema Ticket"
+        },
+        unit_amount: Math.round(price * 100)
+      },
+      quantity: 1
+    }
+  ],
 
-      return_url:
-        "http://localhost:3001/success?session_id={CHECKOUT_SESSION_ID}"
-    });
+  return_url: `${process.env.FRONTEND_URL || "http://localhost:3001"}/success?session_id={CHECKOUT_SESSION_ID}`
+});
+
+
 
     res.json({ clientSecret: session.client_secret });
   } catch (error) {
