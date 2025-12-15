@@ -33,6 +33,23 @@ const cinemaData = {
 };
 
 /* -------------------------------------------------------
+   DATE FORMATTER (ADDED – UI SAFE)
+------------------------------------------------------- */
+const formatShowDateTime = (isoString) => {
+  if (!isoString) return "";
+
+  const d = new Date(isoString);
+
+  return d.toLocaleString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
+/* -------------------------------------------------------
    SEAT GENERATOR (UNCHANGED)
 ------------------------------------------------------- */
 const generateSeats = (totalSeats) => {
@@ -75,10 +92,10 @@ function BookingModal({ movieList = [], onClose }) {
     if (!selectedMovie) return;
 
     fetch("http://localhost:5000/api/shows")
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         const movieShows = data.filter(
-          s => s.name === selectedMovie.title
+          (s) => s.name === selectedMovie.title
         );
         setShows(movieShows);
 
@@ -89,19 +106,13 @@ function BookingModal({ movieList = [], onClose }) {
       });
   }, [selectedMovie]);
 
-  const occupiedSeats = [
-    "A1","A3","A5","B2","B6","C4","C8","D7",
-    "D10","E1","E9","F3","F5","G2","H4","I7",
-    "I10","J1","J8","J12",
-  ];
-
-  const next = () => setStep(s => s + 1);
-  const back = () => setStep(s => s - 1);
+  const next = () => setStep((s) => s + 1);
+  const back = () => setStep((s) => s - 1);
 
   const toggleSeat = (seat) => {
-    setSelectedSeats(prev =>
+    setSelectedSeats((prev) =>
       prev.includes(seat)
-        ? prev.filter(s => s !== seat)
+        ? prev.filter((s) => s !== seat)
         : [...prev, seat]
     );
   };
@@ -117,7 +128,6 @@ function BookingModal({ movieList = [], onClose }) {
   return (
     <div className="booking-overlay">
       <div className="booking-modal">
-
         <div className="close-btn" onClick={onClose}>✕</div>
 
         {selectedMovie && (
@@ -133,7 +143,7 @@ function BookingModal({ movieList = [], onClose }) {
         )}
 
         <div className="booking-steps">
-          {["Movie","Location","Auditorium","Seats","Tickets","Payment"].map(
+          {["Movie", "Location", "Auditorium", "Seats", "Tickets", "Payment"].map(
             (label, index) => (
               <div
                 key={index}
@@ -151,7 +161,7 @@ function BookingModal({ movieList = [], onClose }) {
           <div className="step-content">
             <h3 className="step-title">Select Movie</h3>
             <div className="movie-grid-modal">
-              {movieList.map(m => (
+              {movieList.map((m) => (
                 <div
                   key={m.id}
                   className="movie-select-card"
@@ -177,7 +187,7 @@ function BookingModal({ movieList = [], onClose }) {
             <h3 className="step-title">Select Location</h3>
 
             <div className="option-grid">
-              {[...new Set(shows.map(s => s.location))].map(loc => (
+              {[...new Set(shows.map((s) => s.location))].map((loc) => (
                 <div
                   key={loc}
                   className={`option-card ${location === loc ? "selected" : ""}`}
@@ -199,8 +209,8 @@ function BookingModal({ movieList = [], onClose }) {
 
                 <div className="option-grid">
                   {shows
-                    .filter(s => s.location === location)
-                    .map(show => (
+                    .filter((s) => s.location === location)
+                    .map((show) => (
                       <div
                         key={show.id}
                         className={`option-card ${
@@ -211,7 +221,7 @@ function BookingModal({ movieList = [], onClose }) {
                           next();
                         }}
                       >
-                        {show.date}
+                        {formatShowDateTime(show.date)}
                       </div>
                     ))}
                 </div>
@@ -229,7 +239,7 @@ function BookingModal({ movieList = [], onClose }) {
           <div className="step-content">
             <h3 className="step-title">{cinemaData[location].name}</h3>
             <div className="option-grid">
-              {cinemaData[location].auditoriums.map(a => (
+              {cinemaData[location].auditoriums.map((a) => (
                 <div
                   key={a.id}
                   className="option-card"
@@ -252,10 +262,12 @@ function BookingModal({ movieList = [], onClose }) {
           <div className="step-content">
             <h3 className="step-title">Choose Your Seats</h3>
             <div className="seat-grid">
-              {seatsForAuditorium.map(seat => (
+              {seatsForAuditorium.map((seat) => (
                 <div
                   key={seat}
-                  className={`seat ${selectedSeats.includes(seat) ? "selected" : ""}`}
+                  className={`seat ${
+                    selectedSeats.includes(seat) ? "selected" : ""
+                  }`}
                   onClick={() => toggleSeat(seat)}
                 >
                   {seat}
@@ -277,17 +289,31 @@ function BookingModal({ movieList = [], onClose }) {
             {[
               { type: "adult", label: `Adult (€${adultPrice})` },
               { type: "child", label: `Child (€${childPrice})` },
-            ].map(t => (
+            ].map((t) => (
               <div className="ticket-row" key={t.type}>
                 <div>{t.label}</div>
                 <div className="ticket-controls">
-                  <button onClick={() =>
-                    setTickets(p => ({ ...p, [t.type]: Math.max(0, p[t.type] - 1) }))
-                  }>-</button>
+                  <button
+                    onClick={() =>
+                      setTickets((p) => ({
+                        ...p,
+                        [t.type]: Math.max(0, p[t.type] - 1),
+                      }))
+                    }
+                  >
+                    -
+                  </button>
                   <span>{tickets[t.type]}</span>
-                  <button onClick={() =>
-                    setTickets(p => ({ ...p, [t.type]: p[t.type] + 1 }))
-                  }>+</button>
+                  <button
+                    onClick={() =>
+                      setTickets((p) => ({
+                        ...p,
+                        [t.type]: p[t.type] + 1,
+                      }))
+                    }
+                  >
+                    +
+                  </button>
                 </div>
               </div>
             ))}
@@ -306,7 +332,6 @@ function BookingModal({ movieList = [], onClose }) {
             <CheckoutView totalAmount={totalAmount} />
           </div>
         )}
-
       </div>
     </div>
   );
