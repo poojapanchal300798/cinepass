@@ -1,47 +1,69 @@
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-export default function EditShowModal({ show, onClose, onSubmit }) {
-  const [form, setForm] = useState(show);
+const EditShowModal = ({ show, onClose, refresh }) => {
+  const [date, setDate] = useState(
+    show.date ? new Date(show.date).toISOString().split("T")[0] : ""
+  );
+  const [location, setLocation] = useState(show.location);
+  const [screen, setScreen] = useState(show.screen);
+  const [adultPrice, setAdultPrice] = useState(show.adult_price);
+  const [kidPrice, setKidPrice] = useState(show.kid_price);
 
-  useEffect(() => {
-    setForm(show);
-  }, [show]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/shows/${show.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            name: show.name, // ✅ REQUIRED BY DATABASE
+            date,
+            location,
+            screen,
+            adult_price: Number(adultPrice),
+            kid_price: Number(kidPrice)
+          })
+        }
+      );
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText);
+      }
+
+      refresh();
+      onClose();
+    } catch (err) {
+      console.error("Edit show error:", err);
+      alert("Failed to update show");
+    }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center">
-      <div className="bg-[#0a1f2d] p-6 rounded-xl w-96 border border-[#1e4152]">
-        <h2 className="text-xl font-bold mb-4">Edit Show</h2>
+    <div className="modal-overlay">
+      <div className="modal">
+        <h2>Edit Show</h2>
 
-        {Object.keys(form).map((key) => (
-          key !== "id" && (
-            <input
-              key={key}
-              name={key}
-              value={form[key]}
-              placeholder={key}
-              className="mb-2 p-2 w-full bg-[#0f2b3a] border border-[#1e4152] rounded"
-              onChange={handleChange}
-            />
-          )
-        ))}
+        <form onSubmit={handleSubmit}>
+          <input type="date" value={date} onChange={e => setDate(e.target.value)} required />
+          <input type="text" value={location} onChange={e => setLocation(e.target.value)} required />
+          <input type="text" value={screen} onChange={e => setScreen(e.target.value)} required />
+          <input type="number" value={adultPrice} onChange={e => setAdultPrice(e.target.value)} required />
+          <input type="number" value={kidPrice} onChange={e => setKidPrice(e.target.value)} required />
 
-        <div className="flex justify-end gap-3 mt-4">
-          <button onClick={onClose} className="px-4 py-2 bg-gray-500 rounded">
-            Cancel
-          </button>
-
-          <button
-            onClick={() => onSubmit(form)}
-            className="px-4 py-2 bg-sky-500 rounded"
-          >
-            Save Changes
-          </button>
-        </div>
+          <div className="modal-actions">
+            <button type="button" onClick={onClose}>Cancel</button>
+            <button type="submit">Save Changes</button>
+          </div>
+        </form>
       </div>
     </div>
   );
-}
+};
+
+export default EditShowModal;

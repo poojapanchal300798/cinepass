@@ -52,7 +52,7 @@ app.use("/api/showtimes", showtimeRoutes);
 app.use("/api/seats", seatRoutes);
 
 // =========================
-// STRIPE — CREATE CHECKOUT SESSION (EMBEDDED)
+// STRIPE — CREATE CHECKOUT SESSION (EMBEDDED) ✅ FIXED
 // =========================
 app.post("/api/create-checkout-session", async (req, res) => {
   try {
@@ -63,7 +63,7 @@ app.post("/api/create-checkout-session", async (req, res) => {
     }
 
     const session = await stripe.checkout.sessions.create({
-      ui_mode: "embedded",
+      ui_mode: "embedded", // 🔑 REQUIRED FOR EMBEDDED CHECKOUT
       mode: "payment",
 
       line_items: [
@@ -79,10 +79,8 @@ app.post("/api/create-checkout-session", async (req, res) => {
         }
       ],
 
-      // ✅ FIX 1: Azure-safe return URL
-      return_url: `${
-        process.env.FRONTEND_URL || "http://localhost:3001"
-      }/success?session_id={CHECKOUT_SESSION_ID}`
+      return_url:
+        "http://localhost:3001/success?session_id={CHECKOUT_SESSION_ID}"
     });
 
     res.json({ clientSecret: session.client_secret });
@@ -93,7 +91,7 @@ app.post("/api/create-checkout-session", async (req, res) => {
 });
 
 // =========================
-// STRIPE — SESSION STATUS
+// STRIPE — SESSION STATUS (UNCHANGED)
 // =========================
 app.get("/api/session-status", async (req, res) => {
   try {
@@ -119,20 +117,30 @@ app.get("/api/session-status", async (req, res) => {
 // CLEAN EXPIRED SEAT LOCKS
 // =========================
 setInterval(async () => {
+    console.log(`[${new Date().toLocaleTimeString()}] Polling running`);
+
   try {
-    await pool.query("DELETE FROM seat_locks WHERE expires_at < NOW()");
-    console.log("⏳ Expired seat locks cleaned");
+    const result = await pool.query(
+      "DELETE FROM seat_locks WHERE expires_at < NOW()"
+    );
+
+    if (result.rowCount > 0) {
+      console.log(
+        `[${new Date().toLocaleTimeString()}] Polling: removed ${result.rowCount} expired seat locks`
+      );
+    }
   } catch (err) {
     console.error("Seat lock cleanup error:", err.message);
   }
 }, 30 * 1000);
 
+
 // =========================
 // SERVE FRONTEND (LOCAL + AZURE)
 // =========================
 const frontendPath = process.env.WEBSITE_SITE_NAME
-  ? "/home/site/wwwroot/frontend/dist" // ✅ FIX 2: Vite uses dist
-  : path.join(__dirname, "frontend", "dist");
+  ? "/home/site/wwwroot/frontend/build"
+  : path.join(__dirname, "frontend", "build");
 
 app.use(express.static(frontendPath));
 

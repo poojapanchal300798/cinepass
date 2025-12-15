@@ -1,160 +1,105 @@
-const pool = require("../db");
+const pool = require('../db');
 
-// ============================================
-// GET ALL SHOWTIMES
-// ============================================
-const getAllShowtimes = async (req, res) => {
+// GET all shows
+exports.getAllShows = async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT 
+      SELECT
         id,
-        movie_id,
-        movie_title,
+        name,
+        date,
         location,
-        auditorium,
-        show_datetime
-      FROM showtimes
-      ORDER BY show_datetime ASC
+        screen,
+        adult_price,
+        kid_price,
+        seats,
+        poster
+      FROM shows
+      ORDER BY date ASC
     `);
 
     res.json(result.rows);
   } catch (err) {
-    console.error("Error fetching showtimes:", err);
-    res.status(500).json({ message: "Failed to fetch showtimes" });
+    console.error('Fetch shows error:', err.message);
+    res.status(500).json({ message: 'Failed to fetch shows' });
   }
 };
 
-// ============================================
-// ADD SHOWTIME
-// ============================================
-const addShowtime = async (req, res) => {
-  const { movieId, movieTitle, location, auditorium, showDatetime } = req.body;
-
+// ADD show
+exports.addShow = async (req, res) => {
   try {
-    // Prevent duplicate showtime in SAME AUDITORIUM & TIME
-    const conflict = await pool.query(
-      `
-        SELECT id FROM showtimes 
-        WHERE location = $1
-        AND auditorium = $2
-        AND show_datetime = $3
-      `,
-      [location, auditorium, showDatetime]
+    const {
+      name,
+      date,
+      location,
+      screen,
+      adult_price,
+      kid_price,
+      seats
+    } = req.body;
+
+    await pool.query(
+      `INSERT INTO shows
+       (name, date, location, screen, adult_price, kid_price, seats)
+       VALUES ($1,$2,$3,$4,$5,$6,$7)`,
+      [name, date, location, screen, adult_price, kid_price, seats || 150]
     );
 
-    if (conflict.rows.length > 0) {
-      return res.status(400).json({
-        success: false,
-        message: "A showtime already exists for this auditorium at that time.",
-      });
-    }
+    res.status(201).json({ message: 'Show added' });
+  } catch (err) {
+    console.error('Add show error:', err.message);
+    res.status(500).json({ message: 'Failed to add show' });
+  }
+};
 
-    const result = await pool.query(
-      `
-        INSERT INTO showtimes 
-        (movie_id, movie_title, location, auditorium, show_datetime)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING *
-      `,
-      [movieId, movieTitle, location, auditorium, showDatetime]
+// ✅ UPDATE show (THIS WAS THE BUG)
+exports.updateShow = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      name,          // ✅ REQUIRED
+      date,
+      location,
+      screen,
+      adult_price,
+      kid_price
+    } = req.body;
+
+    await pool.query(
+      `UPDATE shows
+       SET
+         name = $1,
+         date = $2,
+         location = $3,
+         screen = $4,
+         adult_price = $5,
+         kid_price = $6
+       WHERE id = $7`,
+      [
+        name,
+        date,
+        location,
+        screen,
+        adult_price,
+        kid_price,
+        id
+      ]
     );
 
-    res.status(201).json({
-      success: true,
-      message: "Showtime added successfully",
-      show: result.rows[0],
-    });
+    res.json({ message: 'Show updated' });
   } catch (err) {
-    console.error("Error adding showtime:", err);
-    res.status(500).json({ message: "Failed to add showtime" });
+    console.error('Update show error:', err.message);
+    res.status(500).json({ message: 'Failed to update show' });
   }
 };
 
-// ============================================
-// UPDATE SHOWTIME
-// ============================================
-const updateShowtime = async (req, res) => {
-  const { id } = req.params;
-  const { movieId, movieTitle, location, auditorium, showDatetime } = req.body;
-
+// DELETE show
+exports.deleteShow = async (req, res) => {
   try {
-    const result = await pool.query(
-      `
-        UPDATE showtimes
-        SET movie_id = $1,
-            movie_title = $2,
-            location = $3,
-            auditorium = $4,
-            show_datetime = $5
-        WHERE id = $6
-        RETURNING *
-      `,
-      [movieId, movieTitle, location, auditorium, showDatetime, id]
-    );
-
-    res.json({
-      success: true,
-      message: "Showtime updated",
-      show: result.rows[0],
-    });
+    await pool.query('DELETE FROM shows WHERE id=$1', [req.params.id]);
+    res.json({ message: 'Show deleted' });
   } catch (err) {
-    console.error("Error updating showtime:", err);
-    res.status(500).json({ message: "Failed to update showtime" });
+    console.error('Delete show error:', err.message);
+    res.status(500).json({ message: 'Failed to delete show' });
   }
-};
-
-// ============================================
-// DELETE SHOWTIME
-// ============================================
-const deleteShowtime = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    await pool.query("DELETE FROM showtimes WHERE id = $1", [id]);
-
-    res.json({
-      success: true,
-      message: "Showtime deleted",
-    });
-  } catch (err) {
-    console.error("Error deleting showtime:", err);
-    res.status(500).json({ message: "Failed to delete showtime" });
-  }
-};
-
-// ============================================
-// LOOKUP SHOWTIMES (Movie + Location + Auditorium)
-// ============================================
-const getShowtimesForSelection = async (req, res) => {
-  try {
-    const { movieId, location, auditorium } = req.params;
-
-    const result = await pool.query(
-      `
-      SELECT id, show_datetime
-      FROM showtimes
-      WHERE movie_id = $1
-      AND location = $2
-      AND auditorium = $3
-      ORDER BY show_datetime ASC
-      `,
-      [movieId, location, auditorium]
-    );
-
-    res.json({
-      success: true,
-      showtimes: result.rows
-    });
-  } catch (err) {
-    console.error("Error fetching filtered showtimes:", err);
-    res.status(500).json({ message: "Failed to fetch showtimes" });
-  }
-};
-
-module.exports = {
-  getAllShowtimes,
-  addShowtime,
-  updateShowtime,
-  deleteShowtime,
-  getShowtimesForSelection
 };
