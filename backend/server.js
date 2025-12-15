@@ -134,19 +134,18 @@ setInterval(async () => {
   }
 }, 30 * 1000);
 
-
 // =========================
-// SERVE FRONTEND (LOCAL + AZURE)
+// SERVE VITE FRONTEND (AZURE + LOCAL)
 // =========================
-const frontendPath = process.env.WEBSITE_SITE_NAME
-  ? "/home/site/wwwroot/frontend/build"
-  : path.join(__dirname, "frontend", "build");
+const frontendPath = path.join(__dirname, "dist");
 
 app.use(express.static(frontendPath));
 
+// React Router fallback
 app.get("*", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
+
 
 // =========================
 // START SERVER
