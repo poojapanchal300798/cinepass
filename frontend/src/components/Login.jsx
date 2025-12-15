@@ -109,18 +109,6 @@ const Login = () => {
         >
           {loading ? "Logging in..." : "Login to Dashboard"}
         </button>
-
-        {/* Demo Credentials */}
-        <div className="demo-box">
-          <h4>Demo Credentials</h4>
-          <p>Email: <strong>admin@northstar.com</strong></p>
-          <p>Password: <strong>admin123</strong></p>
-        </div>
-
-        <footer className="footer">
-          © 2024 North Star Booking. All rights reserved.
-        </footer>
-
       </div>
     </div>
   );
