@@ -1,57 +1,51 @@
 import React from "react";
-import { FaEdit, FaTrash, FaClock, FaMapMarkerAlt } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import "../../style/manageShows.css";
 
-const Showtable = ({ shows, onEdit, onDelete }) => {
+const ShowTable = ({ shows, onEdit, onDelete }) => {
+  if (!shows || shows.length === 0) {
+    return <p style={{ color: "white" }}>No shows available</p>;
+  }
+
   return (
-    <div className="show-table-wrapper">
-      
-      <table className="show-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Location</th>
-            <th>Movie</th>
-            <th>Show Time</th>
-            <th>Adult (€)</th>
-            <th>Kid (€)</th>
-            <th>Actions</th>
+    <table className="show-table">
+      <thead>
+        <tr>
+          <th>Movie</th>
+          <th>Date</th>
+          <th>Location</th>
+          <th>Screen</th>
+          <th>Adult (€)</th>
+          <th>Kid (€)</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {shows.map((show) => (
+          <tr key={show.id}>
+            {/* ✅ MOVIE NAME — SAME AS USER PAGE */}
+            <td>{show.name}</td>
+
+            <td>{new Date(show.date).toLocaleDateString()}</td>
+            <td>{show.location}</td>
+            <td>{show.screen}</td>
+            <td>€{show.adult_price}</td>
+            <td>€{show.kid_price}</td>
+
+            <td className="actions">
+              <button onClick={() => onEdit(show)} className="edit-btn">
+                <FaEdit />
+              </button>
+              <button onClick={() => onDelete(show.id)} className="delete-btn">
+                <FaTrash />
+              </button>
+            </td>
           </tr>
-        </thead>
-
-        <tbody>
-          {shows.length === 0 ? (
-            <tr>
-              <td colSpan="7" className="empty-row">No shows available</td>
-            </tr>
-          ) : (
-            shows.map((show) => (
-              <tr key={show.id}>
-                <td>{show.date}</td>
-                <td><FaMapMarkerAlt /> {show.location}</td>
-                <td>{show.movie_title}</td>
-                <td>
-                  <FaClock /> {show.time}
-                </td>
-                <td>€{show.adult_price}</td>
-                <td>€{show.child_price}</td>
-
-                <td className="actions">
-                  <button className="edit-btn" onClick={() => onEdit(show)}>
-                    <FaEdit />
-                  </button>
-                  <button className="delete-btn" onClick={() => onDelete(show.id)}>
-                    <FaTrash />
-                  </button>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-
-    </div>
+        ))}
+      </tbody>
+    </table>
   );
 };
 
-export default Showtable;
+export default ShowTable;

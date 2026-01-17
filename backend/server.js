@@ -32,14 +32,22 @@ const app = express();
 // =========================
 app.use(
   cors({
-    origin: [
-      "http://localhost:3001",
-      "http://localhost:3000",
-      process.env.FRONTEND_URL
-    ].filter(Boolean),
+    origin: (origin, callback) => {
+      if (
+        !origin ||
+        origin.includes("localhost") ||
+        origin.includes("azurewebsites.net")
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true
   })
 );
+
+
 
 app.use(express.json());
 
@@ -52,7 +60,7 @@ app.use("/api/showtimes", showtimeRoutes);
 app.use("/api/seats", seatRoutes);
 
 // =========================
-// STRIPE — CREATE CHECKOUT SESSION (EMBEDDED)
+// STRIPE — CREATE CHECKOUT SESSION (EMBEDDED) ✅ FIXED
 // =========================
 app.post("/api/create-checkout-session", async (req, res) => {
   try {
@@ -62,28 +70,27 @@ app.post("/api/create-checkout-session", async (req, res) => {
       return res.status(400).json({ error: "Invalid price value" });
     }
 
-    const session = await stripe.checkout.sessions.create({
-      ui_mode: "embedded",
-      mode: "payment",
+  const session = await stripe.checkout.sessions.create({
+  ui_mode: "embedded",
+  mode: "payment",
 
-      line_items: [
-        {
-          price_data: {
-            currency: "eur",
-            product_data: {
-              name: "Cinema Ticket"
-            },
-            unit_amount: Math.round(price * 100)
-          },
-          quantity: 1
-        }
-      ],
+  line_items: [
+    {
+      price_data: {
+        currency: "eur",
+        product_data: {
+          name: "Cinema Ticket"
+        },
+        unit_amount: Math.round(price * 100)
+      },
+      quantity: 1
+    }
+  ],
 
-      // ✅ FIX 1: Azure-safe return URL
-      return_url: `${
-        process.env.FRONTEND_URL || "http://localhost:3001"
-      }/success?session_id={CHECKOUT_SESSION_ID}`
-    });
+  return_url: `${process.env.FRONTEND_URL || "http://localhost:3001"}/success?session_id={CHECKOUT_SESSION_ID}`
+});
+
+
 
     res.json({ clientSecret: session.client_secret });
   } catch (error) {
@@ -93,7 +100,7 @@ app.post("/api/create-checkout-session", async (req, res) => {
 });
 
 // =========================
-// STRIPE — SESSION STATUS
+// STRIPE — SESSION STATUS (UNCHANGED)
 // =========================
 app.get("/api/session-status", async (req, res) => {
   try {
@@ -119,26 +126,35 @@ app.get("/api/session-status", async (req, res) => {
 // CLEAN EXPIRED SEAT LOCKS
 // =========================
 setInterval(async () => {
+    console.log(`[${new Date().toLocaleTimeString()}] Polling running`);
+
   try {
-    await pool.query("DELETE FROM seat_locks WHERE expires_at < NOW()");
-    console.log("⏳ Expired seat locks cleaned");
+    const result = await pool.query(
+      "DELETE FROM seat_locks WHERE expires_at < NOW()"
+    );
+
+    if (result.rowCount > 0) {
+      console.log(
+        `[${new Date().toLocaleTimeString()}] Polling: removed ${result.rowCount} expired seat locks`
+      );
+    }
   } catch (err) {
     console.error("Seat lock cleanup error:", err.message);
   }
 }, 30 * 1000);
 
 // =========================
-// SERVE FRONTEND (LOCAL + AZURE)
+// SERVE VITE FRONTEND (AZURE + LOCAL)
 // =========================
-const frontendPath = process.env.WEBSITE_SITE_NAME
-  ? "/home/site/wwwroot/frontend/dist" // ✅ FIX 2: Vite uses dist
-  : path.join(__dirname, "frontend", "dist");
+const frontendPath = path.join(__dirname, "dist");
 
 app.use(express.static(frontendPath));
 
+// React Router fallback
 app.get("*", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
+
 
 // =========================
 // START SERVER
